@@ -1193,6 +1193,11 @@ body {
     grid-template-columns: 1fr 1fr !important;
     gap: 8px !important;
   }
+  .vehicle-reg-top-bar > div:nth-child(3),
+  .vehicle-reg-top-bar > div:nth-child(5),
+  .vehicle-reg-top-bar > div:nth-child(6) {
+    grid-column: span 2 !important;
+  }
   .vehicle-reg-main-grid {
     grid-template-columns: 1fr !important;
     gap: 12px !important;
@@ -1201,13 +1206,26 @@ body {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
   }
-  .vehicle-reg-field-row {
+  .vehicle-reg-field-row,
+  .vehicle-reg-triple-row,
+  .vehicle-reg-driver-row,
+  .vehicle-reg-driver-triple-row {
     grid-template-columns: 1fr !important;
     gap: 4px !important;
+    align-items: stretch !important;
   }
-  .vehicle-reg-triple-row {
-    grid-template-columns: 1fr !important;
-    gap: 4px !important;
+  .vehicle-reg-field-row label,
+  .vehicle-reg-triple-row label,
+  .vehicle-reg-driver-row label,
+  .vehicle-reg-driver-triple-row label {
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    color: #475569 !important;
+    margin-bottom: 2px !important;
+  }
+  .diza-listbox-container {
+    max-height: 180px !important;
+    min-height: 120px !important;
   }
 
   /* Cari ve Müşteri Mobilde Tek Sütun */

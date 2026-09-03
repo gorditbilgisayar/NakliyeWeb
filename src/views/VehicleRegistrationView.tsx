@@ -674,7 +674,7 @@ export const VehicleRegistrationView: React.FC = () => {
         </div>
 
         {/* Buton Grubu (Resimdeki Renk ve Düzen) */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        <div className="scrollable-tabs-bar" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <button
             type="button"
             className="btn btn-secondary btn-sm"
@@ -962,7 +962,7 @@ export const VehicleRegistrationView: React.FC = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {/* Ruhsat Sahibi */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Ruhsat Sahibi</label>
                 <input
                   type="text"
@@ -975,7 +975,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Belge No & Tescil */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-triple-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Belge No & Tescil</label>
                 <input
                   type="text"
@@ -996,7 +996,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Markası */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Markası</label>
                 <select
                   className="form-control"
@@ -1016,7 +1016,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Rengi & Modeli */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-triple-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Rengi & Modeli</label>
                 <input
                   type="text"
@@ -1037,7 +1037,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Tipi & Şase No */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-triple-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Tipi & Şase No</label>
                 <input
                   type="text"
@@ -1058,7 +1058,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Aracın Özelliği */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Aracın Özelliği</label>
                 <select
                   className="form-control"
@@ -1078,7 +1078,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Problemli mi? */}
-              <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#b91c1c' }}>Problemli mi?</label>
                 <select
                   className="form-control"
@@ -1124,7 +1124,7 @@ export const VehicleRegistrationView: React.FC = () => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {/* Ehliyet No & Alındığı Yer */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-triple-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Ehliyet No & Yer</label>
                 <input
                   type="text"
@@ -1145,7 +1145,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Adres */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Adres</label>
                 <input
                   type="text"
@@ -1158,7 +1158,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Cep & İş Telefonu */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-triple-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Cep & İş Tel</label>
                 <input
                   type="text"
@@ -1179,7 +1179,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Referans */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Referans</label>
                 <input
                   type="text"
@@ -1192,7 +1192,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* Açıklama */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-field-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>Açıklama</label>
                 <input
                   type="text"
@@ -1205,7 +1205,7 @@ export const VehicleRegistrationView: React.FC = () => {
               </div>
 
               {/* V.D. & V.No / TC */}
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', alignItems: 'center', gap: 6 }}>
+              <div className="vehicle-reg-triple-row">
                 <label style={{ fontSize: 11, fontWeight: 800, color: '#334155' }}>V.D. & V.No/TC</label>
                 <input
                   type="text"
@@ -2068,25 +2068,27 @@ export const VehicleRegistrationView: React.FC = () => {
         {/* 5. Alt Durum Çubuğu (Status Bar) */}
         <div
           style={{
-            padding: '8px 16px',
+            padding: '8px 14px',
             background: '#ffedd5',
             borderTop: '1.5px solid #fdba74',
             display: 'flex',
+            flexWrap: 'wrap',
             justifyContent: 'space-between',
             alignItems: 'center',
-            fontSize: 12,
+            fontSize: 11.5,
             fontWeight: 800,
-            color: '#9a3412'
+            color: '#9a3412',
+            gap: 8
           }}
         >
-          <div>
-            <span>{vehicles.length} Araç Listelendi...</span>
-            <span style={{ marginLeft: 16, color: '#c2410c' }}>
-              Seçili Araç: <strong>{formData.plate || '-'} ({formData.driverName || '-'})</strong>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+            <span>{vehicles.length} Araç Listelendi</span>
+            <span style={{ color: '#c2410c' }}>
+              • Seçili Araç: <strong>{formData.plate || '-'} ({formData.driverName || '-'})</strong>
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: 20 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
             <span>Toplam Tonaj: <strong>{totalQuantity.toFixed(2)} Ton</strong></span>
             <span>Toplam Komisyon: <strong>{totalCommission.toLocaleString('tr-TR')} TL</strong></span>
           </div>
@@ -2122,16 +2124,16 @@ export const VehicleRegistrationView: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: 9999,
-              padding: 20
+              padding: 10
             }}
             onClick={() => setIsDefinedLoadModalOpen(false)}
           >
             <div
-              className="glass-card"
+              className="modal-card"
               style={{
                 width: '100%',
                 maxWidth: 1060,
-                maxHeight: '85vh',
+                maxHeight: '92vh',
                 background: '#ffffff',
                 borderRadius: 'var(--radius-lg)',
                 border: '2px solid #93c5fd',
@@ -2145,7 +2147,7 @@ export const VehicleRegistrationView: React.FC = () => {
               {/* Modal Başlık */}
               <div
                 style={{
-                  padding: '14px 20px',
+                  padding: '10px 14px',
                   background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
                   color: '#ffffff',
                   display: 'flex',
