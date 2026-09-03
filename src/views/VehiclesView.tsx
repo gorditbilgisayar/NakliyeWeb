@@ -453,7 +453,7 @@ export const VehiclesView: React.FC = () => {
       </div>
 
       {/* 2. ANA ÇALIŞMA ALANI: SOL DİZA CARİ PANELİ + SAĞ MODERN HAREKETLER TABLOSU */}
-      <div style={{ display: 'grid', gridTemplateColumns: '290px 1fr', gap: 14, alignItems: 'start' }}>
+      <div className="cari-hareketler-main-grid">
         {/* SOL PANEL: CARİ & ARAÇ LİSTESİ */}
         <div
           className="glass-card"
@@ -730,7 +730,8 @@ export const VehiclesView: React.FC = () => {
               borderRadius: 8
             }}
           >
-            <div style={{ overflowX: 'auto', maxHeight: 520 }}>
+            {/* Masaüstü Tablosu */}
+            <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: 520 }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
                 {/* DİZA Tablo Başlığı */}
                 <thead>
@@ -1052,6 +1053,178 @@ export const VehiclesView: React.FC = () => {
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobilde Dokunmatik Cari Hareket Kartları */}
+            <div className="mobile-only-cards" style={{ padding: '12px' }}>
+              {currentMovements.map((m, idx) => {
+                const hasDebit = Number(m.debit) > 0;
+                const hasCredit = Number(m.credit) > 0;
+
+                return (
+                  <div
+                    key={m.id}
+                    className="mobile-action-card"
+                    style={{
+                      borderLeft: hasDebit ? '4px solid #ef4444' : hasCredit ? '4px solid #10b981' : '4px solid #94a3b8'
+                    }}
+                  >
+                    <div className="card-top-row">
+                      <span style={{ fontWeight: 800, color: '#64748b', fontSize: 11 }}>
+                        K.No: #{m.kNo || idx + 1}
+                      </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <span className="card-date-tag">{m.date}</span>
+                        {m.hasReminder && (
+                          <span title="Hatırlatıcı Aktif" style={{ color: '#f59e0b', fontSize: 12 }}>🔔</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', margin: '3px 0' }}>
+                      {m.description || 'Açıklama Belirtilmemiş'}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', margin: '2px 0' }}>
+                      <span style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: 4, fontSize: 10.5, fontWeight: 800, color: '#334155' }}>
+                        {m.currency}
+                      </span>
+                      {m.isInvoice && (
+                        <span style={{ background: 'rgba(59,130,246,0.1)', color: '#2563eb', padding: '2px 6px', borderRadius: 4, fontSize: 10.5, fontWeight: 800 }}>
+                          ✓ Fatura
+                        </span>
+                      )}
+                      {m.isCash && (
+                        <span style={{ background: 'rgba(16,185,129,0.1)', color: '#059669', padding: '2px 6px', borderRadius: 4, fontSize: 10.5, fontWeight: 800 }}>
+                          Kasa
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="card-bottom-row" style={{ marginTop: 4 }}>
+                      <div>
+                        {hasDebit && (
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                            <span style={{ fontSize: 11, color: '#dc2626', fontWeight: 800 }}>BORÇ:</span>
+                            <strong style={{ fontSize: 15, fontFamily: 'monospace', color: '#dc2626' }}>
+                              {Number(m.debit).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {m.currency}
+                            </strong>
+                          </div>
+                        )}
+                        {hasCredit && (
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+                            <span style={{ fontSize: 11, color: '#059669', fontWeight: 800 }}>ALACAK:</span>
+                            <strong style={{ fontSize: 15, fontFamily: 'monospace', color: '#059669' }}>
+                              {Number(m.credit).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {m.currency}
+                            </strong>
+                          </div>
+                        )}
+                        {!hasDebit && !hasCredit && (
+                          <span style={{ fontSize: 12, color: '#94a3b8' }}>0,00 {m.currency}</span>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleDeleteRow(m.id)}
+                        style={{ padding: '4px 8px', fontSize: 11 }}
+                        title="Hareketi Sil"
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Mobilde Hızlı Yeni Hareket Ekleme Kutusu */}
+              <div
+                className="mobile-action-card"
+                style={{
+                  background: '#fef2f2',
+                  border: '1.5px dashed var(--diza-red)',
+                  padding: 12
+                }}
+              >
+                <div style={{ fontSize: 12, fontWeight: 900, color: 'var(--diza-red)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <Plus size={14} /> Bu Cari İçin Hızlı Yeni Hareket Ekle
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="Hareket Açıklaması (Örn: Mazot Masrafı, Sefer Avansı)..."
+                    value={draftRow.description}
+                    onChange={e => setDraftRow(prev => ({ ...prev, description: e.target.value }))}
+                    style={{
+                      padding: '8px 10px',
+                      borderRadius: 6,
+                      border: '1px solid #cbd5e1',
+                      fontSize: 13,
+                      fontWeight: 700
+                    }}
+                  />
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                    <div>
+                      <label style={{ fontSize: 10.5, fontWeight: 800, color: '#dc2626' }}>Borç Tutarı</label>
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        value={draftRow.debit !== undefined && draftRow.debit !== 0 ? draftRow.debit : ''}
+                        onChange={e => setDraftRow(prev => ({ ...prev, debit: Number(e.target.value) }))}
+                        style={{
+                          width: '100%',
+                          padding: '8px 10px',
+                          borderRadius: 6,
+                          border: '1px solid #cbd5e1',
+                          fontSize: 13,
+                          fontWeight: 800,
+                          fontFamily: 'monospace',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 10.5, fontWeight: 800, color: '#059669' }}>Alacak Tutarı</label>
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        value={draftRow.credit !== undefined && draftRow.credit !== 0 ? draftRow.credit : ''}
+                        onChange={e => setDraftRow(prev => ({ ...prev, credit: Number(e.target.value) }))}
+                        style={{
+                          width: '100%',
+                          padding: '8px 10px',
+                          borderRadius: 6,
+                          border: '1px solid #cbd5e1',
+                          fontSize: 13,
+                          fontWeight: 800,
+                          fontFamily: 'monospace',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSaveDraftRow}
+                    style={{
+                      padding: '9px',
+                      fontSize: 13,
+                      fontWeight: 900,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6
+                    }}
+                  >
+                    <Plus size={16} /> Hareketi Kaydet
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Tablo Alt Toplam Özeti (DİZA Ribbon) */}

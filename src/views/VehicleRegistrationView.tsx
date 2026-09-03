@@ -712,14 +712,10 @@ export const VehicleRegistrationView: React.FC = () => {
 
       {/* 2. Üst Hızlı Alanlar (Plaka, Dorse, Sürücü Adı, Hesap Seçimi, Fatura, İban) */}
       <div
-        className="glass-card"
+        className="glass-card vehicle-reg-top-bar"
         style={{
-          padding: '10px 16px',
-          background: '#ffffff',
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 1.2fr 1.5fr 1.1fr 1.8fr 2fr',
-          gap: 12,
-          alignItems: 'center'
+          padding: '12px 16px',
+          background: '#ffffff'
         }}
       >
         <div className="form-group" style={{ marginBottom: 0 }}>
@@ -845,7 +841,7 @@ export const VehicleRegistrationView: React.FC = () => {
       </div>
 
       {/* 3. Ana Gövde (Sol Liste Paneli + Sağ 2 Sütun Form) */}
-      <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 16, alignItems: 'stretch' }}>
+      <div className="vehicle-reg-main-grid">
         {/* Sol Panel: Araç Arama ve Tam Boy ListBox */}
         <div
           className="glass-card"
@@ -940,7 +936,7 @@ export const VehicleRegistrationView: React.FC = () => {
         </div>
 
         {/* Sağ Panel: ARAÇ BİLGİLERİ & SÜRÜCÜ BİLGİLERİ (2 Kutu) */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="vehicle-reg-form-cols">
           {/* 1. KUTU: ARAÇ BİLGİLERİ */}
           <div
             className="glass-card"
@@ -1266,8 +1262,8 @@ export const VehicleRegistrationView: React.FC = () => {
           </span>
         </div>
 
-        {/* Excel / Access Tarzı Alt Grid */}
-        <div style={{ overflowX: 'auto', maxHeight: '300px' }}>
+        {/* Excel / Access Tarzı Alt Grid (Masaüstü Tablo) */}
+        <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: '300px' }}>
           <table
             style={{
               width: '100%',
@@ -2018,6 +2014,55 @@ export const VehicleRegistrationView: React.FC = () => {
               </tr>
             </tbody>
           </table>
+        </div>
+
+        {/* Mobilde Araca Ait Sefer Dokunmatik Kartları */}
+        <div className="mobile-only-cards" style={{ padding: '12px' }}>
+          {currentRows.map(r => (
+            <div key={r.id} className="mobile-action-card" style={{ borderLeft: '4px solid var(--diza-red)' }}>
+              <div className="card-top-row">
+                <span style={{ fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
+                  S.NO: {r.sNo}
+                </span>
+                <span className="card-date-tag">{r.date}</span>
+              </div>
+
+              <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', margin: '4px 0 2px 0' }}>
+                {r.company}
+              </div>
+
+              <div className="card-route-row">
+                <span className="from-loc">{r.loadingPlace || 'Yükleme Yeri'}</span>
+                <span className="route-arrow">➔</span>
+                <span className="to-loc">{r.unloadingPlace || 'İndirme Yeri'} {r.unloadingDistrict ? `(${r.unloadingDistrict})` : ''}</span>
+              </div>
+
+              <div className="card-meta-row">
+                <span>{r.goodsType} ({r.quantity} Ton) • Satış: {r.sellPrice?.toLocaleString('tr-TR')} ₺</span>
+              </div>
+
+              <div className="card-bottom-row">
+                <div className="card-amount">
+                  <span className="label">Komisyon:</span>
+                  <strong style={{ color: '#059669' }}>{r.commission?.toLocaleString('tr-TR')} ₺</strong>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  onClick={() => handleDeleteRow(r.id)}
+                  style={{ padding: '4px 10px', fontSize: 11 }}
+                >
+                  <Trash2 size={12} /> Sil
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {currentRows.length === 0 && (
+            <div className="mobile-empty-card">
+              Bu araca kayıtlı sefer bulunmuyor.
+            </div>
+          )}
         </div>
 
         {/* 5. Alt Durum Çubuğu (Status Bar) */}

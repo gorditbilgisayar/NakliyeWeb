@@ -95,7 +95,7 @@ export const DashboardView: React.FC<{
             <div className="dashboard-hero-title-row">
               <h2>DİZA LOJİSTİK & FİLO ERP</h2>
               <span className="dashboard-version-badge">
-                Gördit Bilgisayar v2.5.3
+                Gördit Bilgisayar v2.5.4
               </span>
             </div>
             <p>

@@ -275,7 +275,7 @@ export const CustomersView: React.FC = () => {
           boxShadow: 'var(--shadow-md)'
         }}
       >
-        <div className="table-responsive" style={{ maxHeight: 'calc(100vh - 210px)' }}>
+        <div className="table-responsive desktop-only-table" style={{ maxHeight: 'calc(100vh - 210px)' }}>
           <table className="data-table" style={{ fontSize: 12, width: '100%' }}>
             <thead>
               <tr style={{ background: '#f1f5f9', borderBottom: '2px solid #cbd5e1', color: '#334155' }}>
@@ -450,6 +450,98 @@ export const CustomersView: React.FC = () => {
           </table>
         </div>
 
+        {/* Mobilde Dokunmatik Firma & Cari Kartları */}
+        <div className="mobile-only-cards" style={{ padding: '12px' }}>
+          {filteredCustomers.map(c => {
+            const bal = getCustomerBalance(c.id, 'TL');
+            const authName = `${c.authorizedFirstName || ''} ${c.authorizedLastName || ''}`.trim() || c.authorizedPerson || 'Belirtilmedi';
+
+            return (
+              <div
+                key={c.id}
+                className="mobile-action-card"
+                style={{
+                  borderLeft: c.isProblematic ? '4px solid #ef4444' : bal.bakiye > 0 ? '4px solid var(--diza-red)' : '4px solid #10b981'
+                }}
+              >
+                <div className="card-top-row">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span style={{ fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
+                      #{c.id}
+                    </span>
+                    <strong style={{ fontSize: 14, color: '#0f172a' }}>{c.name}</strong>
+                  </div>
+                  {c.isProblematic ? (
+                    <span className="card-status-badge expense">RİSKLİ</span>
+                  ) : (
+                    <span className="card-status-badge on-road">{c.city}</span>
+                  )}
+                </div>
+
+                <div style={{ fontSize: 12, color: '#475569', margin: '2px 0' }}>
+                  Yetkili: <strong>{authName}</strong> • {c.city} {c.district ? `/ ${c.district}` : ''}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '4px 0' }}>
+                  <a
+                    href={`tel:${cleanPhoneForTelLink(c.gsmPhone || c.phone)}`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      color: 'var(--diza-red)',
+                      fontWeight: 800,
+                      fontSize: 12.5,
+                      textDecoration: 'none'
+                    }}
+                  >
+                    <Phone size={13} /> {c.gsmPhone || c.phone}
+                  </a>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <span style={{ fontSize: 10.5, color: '#64748b' }}>Açık Bakiye: </span>
+                    <strong
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 14,
+                        color: bal.bakiye > 0 ? '#b91c1c' : '#059669'
+                      }}
+                    >
+                      {formatCurrency(bal.bakiye, 'TL')}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="card-bottom-row" style={{ gap: 8 }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={e => handleOpenEdit(e, c)}
+                    style={{ flex: 1, padding: '8px 10px', fontSize: 12, fontWeight: 800, color: '#1d4ed8' }}
+                  >
+                    <Edit size={14} /> Düzelt
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={() => setSelectedCustomer(c)}
+                    style={{ flex: 1, padding: '8px 10px', fontSize: 12, fontWeight: 900 }}
+                  >
+                    <FileText size={14} /> Ekstre & Hareketler
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+
+          {filteredCustomers.length === 0 && (
+            <div className="mobile-empty-card">
+              Aranan kriterlere uygun firma kaydı bulunamadı.
+            </div>
+          )}
+        </div>
+
         {/* Tablo Alt Bilgi Çubuğu */}
         <div
           style={{
@@ -560,7 +652,7 @@ export const CustomersView: React.FC = () => {
                 </div>
 
                 {/* 2. BLOK: YETKİLİ ADI & SOYADI */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+                <div className="customer-grid-row-2">
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                       YETKİLİ ADI
@@ -590,10 +682,8 @@ export const CustomersView: React.FC = () => {
 
                 {/* 3. BLOK: 81 İL VE TÜM İLÇELER DROPDOWNLARI */}
                 <div
+                  className="customer-grid-row-2"
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: 14,
                     background: '#f8fafc',
                     padding: 14,
                     borderRadius: 'var(--radius-lg)',
@@ -641,7 +731,7 @@ export const CustomersView: React.FC = () => {
                 </div>
 
                 {/* 4. BLOK: 0(XXX) XXX XX XX TELEFONLAR */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+                <div className="customer-grid-row-3">
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                       GSM / CEP <span style={{ color: 'var(--diza-red)' }}>*</span>
@@ -687,7 +777,7 @@ export const CustomersView: React.FC = () => {
                 </div>
 
                 {/* 5. BLOK: E-POSTA, VERGİ DAİRESİ, VERGİ NO / TCKN */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: 12 }}>
+                <div className="customer-grid-row-3">
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                       E-POSTA
@@ -861,10 +951,8 @@ export const CustomersView: React.FC = () => {
             <div className="modal-body">
               {/* Bakiye Özeti */}
               <div
+                className="customer-grid-row-3"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: 12,
                   marginBottom: 20,
                   background: '#f8fafc',
                   padding: 14,
@@ -894,7 +982,9 @@ export const CustomersView: React.FC = () => {
 
               {/* Düzenlenen Faturalar */}
               <h4 style={{ fontSize: 14, marginBottom: 10, color: '#0f172a' }}>Düzenlenen Faturalar ({customerInvoices.length})</h4>
-              <div className="table-responsive" style={{ marginBottom: 20 }}>
+              
+              {/* Masaüstü Fatura Tablosu */}
+              <div className="table-responsive desktop-only-table" style={{ marginBottom: 20 }}>
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -927,9 +1017,39 @@ export const CustomersView: React.FC = () => {
                 </table>
               </div>
 
+              {/* Mobilde Fatura Kartları */}
+              <div className="mobile-only-cards" style={{ marginBottom: 20 }}>
+                {customerInvoices.map(inv => (
+                  <div key={inv.id} className="mobile-action-card">
+                    <div className="card-top-row">
+                      <strong style={{ color: 'var(--diza-red)', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
+                        {inv.invoiceNo}
+                      </strong>
+                      <span className={`badge-status ${inv.paymentStatus === 'ODENDI' ? 'badge-teslim' : 'badge-fatura'}`}>
+                        {inv.paymentStatus}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: 11, color: '#64748b' }}>
+                      Tarih: {formatDate(inv.invoiceDate)} • KDV: {formatCurrency(inv.vatTotal, inv.currency)}
+                    </div>
+                    <div className="card-bottom-row">
+                      <span style={{ fontSize: 11, fontWeight: 700, color: '#334155' }}>Fatura Toplamı:</span>
+                      <strong style={{ fontSize: 15, fontFamily: 'var(--font-mono)', color: '#0f172a' }}>
+                        {formatCurrency(inv.grandTotal, inv.currency)}
+                      </strong>
+                    </div>
+                  </div>
+                ))}
+                {customerInvoices.length === 0 && (
+                  <div className="mobile-empty-card">Kayıtlı fatura bulunmuyor.</div>
+                )}
+              </div>
+
               {/* Gerçekleşen Sevkiyatlar */}
               <h4 style={{ fontSize: 14, marginBottom: 10, color: '#0f172a' }}>Sevkiyat Hareketleri ({customerShipments.length})</h4>
-              <div className="table-responsive">
+              
+              {/* Masaüstü Sevkiyat Tablosu */}
+              <div className="table-responsive desktop-only-table">
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -960,6 +1080,37 @@ export const CustomersView: React.FC = () => {
                     )}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobilde Sevkiyat Kartları */}
+              <div className="mobile-only-cards">
+                {customerShipments.map(s => (
+                  <div key={s.id} className="mobile-action-card">
+                    <div className="card-top-row">
+                      <span style={{ color: 'var(--diza-red)', fontWeight: 800, fontFamily: 'var(--font-mono)', fontSize: 12.5 }}>
+                        {s.shipmentNo}
+                      </span>
+                      <span className="card-date-tag">{formatDate(s.loadingDate)}</span>
+                    </div>
+                    <div className="card-route-row" style={{ margin: '3px 0' }}>
+                      <span className="from-loc">{s.loadingLocation}</span>
+                      <span className="route-arrow">➔</span>
+                      <span className="to-loc">{s.unloadingLocation}</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: '#64748b' }}>
+                      {s.goodsType} ({s.quantity} {s.unit}) • {s.vehiclePlate || 'Araçsız'}
+                    </div>
+                    <div className="card-bottom-row">
+                      <span style={{ fontSize: 11, color: '#334155' }}>Navlun:</span>
+                      <strong style={{ fontSize: 14, fontFamily: 'var(--font-mono)', color: 'var(--diza-red)' }}>
+                        {formatCurrency(s.netPayableAmount, s.currency)}
+                      </strong>
+                    </div>
+                  </div>
+                ))}
+                {customerShipments.length === 0 && (
+                  <div className="mobile-empty-card">Sevkiyat kaydı bulunmuyor.</div>
+                )}
               </div>
             </div>
 

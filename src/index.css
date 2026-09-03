@@ -1024,6 +1024,62 @@ body {
   display: none;
 }
 
+/* Araç Kayıt Kartı Responsive Sınıfları */
+.vehicle-reg-top-bar {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1.5fr 1.1fr 1.8fr 2fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.vehicle-reg-main-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.vehicle-reg-form-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.vehicle-reg-field-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 6px;
+}
+
+.vehicle-reg-triple-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Cari Hareketler Responsive Sınıfları */
+.cari-hareketler-main-grid {
+  display: grid;
+  grid-template-columns: 290px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+/* Cari & Müşteri Görünümü Responsive Sınıfları */
+.customer-grid-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.customer-grid-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 @media (max-width: 992px) {
   .desktop-only-table {
     display: none !important;
@@ -1035,6 +1091,48 @@ body {
   }
   .mobile-fab-container {
     display: block !important;
+  }
+
+  /* Araç Kayıt Formu Mobilde Tek Sütun */
+  .vehicle-reg-top-bar {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .vehicle-reg-main-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .vehicle-reg-form-cols {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .vehicle-reg-field-row {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+  }
+  .vehicle-reg-triple-row {
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+  }
+
+  /* Cari ve Müşteri Mobilde Tek Sütun */
+  .cari-hareketler-main-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .customer-grid-row-3 {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .customer-grid-row-2 {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+}
+
+@media (max-width: 540px) {
+  .vehicle-reg-top-bar {
+    grid-template-columns: 1fr !important;
   }
 }
 
