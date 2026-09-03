@@ -299,14 +299,14 @@ export const InvoicesView: React.FC<{
 
         {/* Arama & Butonlar */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative', flex: 1, minWidth: 160, maxWidth: 260 }}>
             <input
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Fatura No veya Müşteri Ara..."
               style={{
-                width: 210,
+                width: '100%',
                 padding: '6px 10px 6px 28px',
                 border: '1.5px solid #cbd5e1',
                 borderRadius: 6,

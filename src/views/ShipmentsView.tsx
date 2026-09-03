@@ -270,7 +270,7 @@ export const ShipmentsView: React.FC<{
           </div>
 
           {/* Sekme Butonları */}
-          <div style={{ display: 'flex', background: '#f1f5f9', padding: 3, borderRadius: 6, gap: 2 }}>
+          <div className="scrollable-tabs-bar" style={{ display: 'flex', background: '#f1f5f9', padding: 3, borderRadius: 6, gap: 2 }}>
             <button
               type="button"
               onClick={() => setInvoiceFilterTab('UNINVOICED')}

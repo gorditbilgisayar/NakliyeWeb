@@ -236,8 +236,8 @@ export const CustomersView: React.FC = () => {
           borderLeft: '4px solid var(--diza-red)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1, minWidth: 280 }}>
-          <div style={{ position: 'relative', width: '100%', maxWidth: 360 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, flex: 1, minWidth: 220 }}>
+          <div style={{ position: 'relative', width: '100%', maxWidth: 360, minWidth: 200, flex: 1 }}>
             <Search size={16} color="var(--text-dim)" style={{ position: 'absolute', left: 12, top: 12 }} />
             <input
               type="text"
@@ -249,12 +249,12 @@ export const CustomersView: React.FC = () => {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: 16, fontSize: 13 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, fontSize: 12 }}>
             <span style={{ color: 'var(--text-muted)' }}>
-              Kayıtlı Firma & Cari: <strong style={{ color: '#0f172a' }}>{customers.length}</strong>
+              Kayıtlı Cari: <strong style={{ color: '#0f172a' }}>{customers.length}</strong>
             </span>
             <span style={{ color: 'var(--text-muted)' }}>
-              Toplam Açık Alacak: <strong style={{ color: 'var(--diza-red)', fontFamily: 'var(--font-mono)' }}>{formatCurrency(totalReceivables, 'TL')}</strong>
+              Toplam Alacak: <strong style={{ color: 'var(--diza-red)', fontFamily: 'var(--font-mono)' }}>{formatCurrency(totalReceivables, 'TL')}</strong>
             </span>
           </div>
         </div>

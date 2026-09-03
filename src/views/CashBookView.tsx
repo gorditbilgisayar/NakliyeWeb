@@ -136,8 +136,8 @@ export const CashBookView: React.FC<{
       </div>
 
       {/* 2. Filtre ve Yeni Ekle Barı */}
-      <div className="glass-card" style={{ padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', gap: 8 }}>
+      <div className="glass-card" style={{ padding: '12px 16px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {['ALL', 'GIRIS', 'CIKIS'].map(st => (
             <button
               key={st}
@@ -291,7 +291,7 @@ export const CashBookView: React.FC<{
 
             <form onSubmit={handleSubmit}>
               <div className="modal-body">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
                   <div className="form-group">
                     <label>İşlem Türü</label>
                     <select

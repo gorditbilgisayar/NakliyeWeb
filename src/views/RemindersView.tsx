@@ -88,13 +88,13 @@ export const RemindersView: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Üst Bar */}
-      <div className="glass-card" style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div className="glass-card" style={{ padding: '14px 18px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
         <div>
-          <h3 style={{ fontSize: 16, fontWeight: 800 }}>Çek / Senet & Vade Hatırlatıcı ({reminders.length} Evrak)</h3>
-          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Müşteriden alınan çekler, firmamızın verdiği senetler ve vadeli ödemeler</p>
+          <h3 style={{ fontSize: 16, fontWeight: 800, margin: 0 }}>Çek / Senet & Vade Hatırlatıcı ({reminders.length} Evrak)</h3>
+          <p style={{ fontSize: 11.5, color: 'var(--text-muted)', margin: 0 }}>Müşteriden alınan çekler, firmamızın verdiği senetler ve vadeli ödemeler</p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <div style={{ display: 'flex', gap: 6 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {(['ALL', 'ALACAK', 'BORC'] as const).map(dir => (
               <button
                 key={dir}
@@ -133,7 +133,7 @@ export const RemindersView: React.FC = () => {
               filtered.map(r => (
                 <tr key={r.id}>
                   <td>
-                    <strong style={{ color: '#fff', fontSize: 13 }}>{formatDate(r.dueDate)}</strong>
+                    <strong style={{ color: '#0f172a', fontSize: 13 }}>{formatDate(r.dueDate)}</strong>
                   </td>
                   <td>
                     <span className="badge-status badge-siparis">{r.type}</span>

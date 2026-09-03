@@ -336,7 +336,7 @@ export const VehiclesView: React.FC = () => {
         {/* Sağ: DİZA Döviz Rozetleri & Aksiyon Butonları */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
           {/* Döviz Sayaçları */}
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {/* TL Kasa */}
             <div
               style={{
@@ -409,7 +409,7 @@ export const VehiclesView: React.FC = () => {
           </div>
 
           {/* DİZA Aksiyon Butonları */}
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div className="scrollable-tabs-bar" style={{ display: 'flex', gap: 6 }}>
             <button
               type="button"
               className="btn btn-primary"

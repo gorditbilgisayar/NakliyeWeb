@@ -20,13 +20,13 @@ export const EnvelopePrintView: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       {/* Üst Seçim ve Ayar Kartı */}
-      <div className="glass-card no-print" style={{ padding: '16px 20px', background: '#fff' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div className="glass-card no-print" style={{ padding: '14px 18px', background: '#fff' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, gap: 10 }}>
           <div>
-            <h3 style={{ fontSize: 16, fontWeight: 900, color: '#0f172a' }}>
+            <h3 style={{ fontSize: 16, fontWeight: 900, color: '#0f172a', margin: 0 }}>
               Zarf & Resmi Evrak Yazdırma Modülü
             </h3>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: 11.5, color: 'var(--text-muted)', margin: 0 }}>
               Fatura, ekstre ve resmi evrak gönderimleri için standart zarf şablonları
             </p>
           </div>
@@ -36,7 +36,7 @@ export const EnvelopePrintView: React.FC = () => {
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
           {/* Müşteri Seçimi */}
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label style={{ fontSize: 11, fontWeight: 800, color: '#475569' }}>ALICI MÜŞTERİ / CARİ</label>
