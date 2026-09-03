@@ -4,6 +4,9 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { BottomNav } from './components/BottomNav';
 import { NotificationModal } from './components/NotificationModal';
+import { MobileQuickActionFab } from './components/MobileQuickActionFab';
+import { MobileShipmentWizardModal } from './components/MobileShipmentWizardModal';
+import { MobileCashWizardModal } from './components/MobileCashWizardModal';
 
 import { DashboardView } from './views/DashboardView';
 import { VehicleRegistrationView } from './views/VehicleRegistrationView';
@@ -17,7 +20,7 @@ import { EnvelopePrintView } from './views/EnvelopePrintView';
 import { ParametersView } from './views/ParametersView';
 
 export const MainApp: React.FC = () => {
-  const { activeTab } = useApp();
+  const { activeTab, setActiveTab } = useApp();
 
   // Modallar
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
@@ -25,6 +28,10 @@ export const MainApp: React.FC = () => {
   const [isCashModalOpen, setIsCashModalOpen] = useState(false);
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Yeni Mobil Kolay Sihirbaz Modalları
+  const [isMobileShipmentWizardOpen, setIsMobileShipmentWizardOpen] = useState(false);
+  const [isMobileCashWizardOpen, setIsMobileCashWizardOpen] = useState(false);
 
   return (
     <div className="app-container">
@@ -92,6 +99,32 @@ export const MainApp: React.FC = () => {
 
       {/* Mobil Alt Bar */}
       <BottomNav onOpenMobileMenu={() => setIsMobileMenuOpen(true)} />
+
+      {/* Mobil Hızlı Eylem Butonu (FAB) */}
+      <MobileQuickActionFab
+        onNewShipment={() => setIsMobileShipmentWizardOpen(true)}
+        onNewCash={() => setIsMobileCashWizardOpen(true)}
+        onNewInvoice={() => {
+          setActiveTab('invoices');
+          setIsInvoiceModalOpen(true);
+        }}
+        onNewReminder={() => {
+          setActiveTab('reminders');
+          setIsReminderModalOpen(true);
+        }}
+      />
+
+      {/* Mobil Kolay Sevkiyat Sihirbazı */}
+      <MobileShipmentWizardModal
+        isOpen={isMobileShipmentWizardOpen}
+        onClose={() => setIsMobileShipmentWizardOpen(false)}
+      />
+
+      {/* Mobil Kolay Kasa Sihirbazı */}
+      <MobileCashWizardModal
+        isOpen={isMobileCashWizardOpen}
+        onClose={() => setIsMobileCashWizardOpen(false)}
+      />
 
       {/* Vade & Risk Bildirim Modalı */}
       <NotificationModal

@@ -95,7 +95,7 @@ export const DashboardView: React.FC<{
             <div className="dashboard-hero-title-row">
               <h2>DİZA LOJİSTİK & FİLO ERP</h2>
               <span className="dashboard-version-badge">
-                Gördit Bilgisayar v2.5.2
+                Gördit Bilgisayar v2.5.3
               </span>
             </div>
             <p>
@@ -299,7 +299,8 @@ export const DashboardView: React.FC<{
             </button>
           </div>
 
-          <div style={{ overflowX: 'auto', maxHeight: 330, background: '#ffffff' }}>
+          {/* Masaüstü Tablo Görünümü */}
+          <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: 330, background: '#ffffff' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
               <thead>
                 <tr style={{ background: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569', fontWeight: 800 }}>
@@ -363,12 +364,62 @@ export const DashboardView: React.FC<{
                 {onTheRoadShipments.length === 0 && (
                   <tr>
                     <td colSpan={7} style={{ padding: 25, textAlign: 'center', color: '#94a3b8' }}>
-                      Şu anda yolda olan aktif sefer bulunmuyor. Yeni Yük Ekle butonuyla sefere çıkarabilirsiniz.
+                      Şu anda yolda olan aktif sefer bulunmuyor.
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobilde Dokunmatik İşlem Kartları */}
+          <div className="mobile-only-cards">
+            {onTheRoadShipments.slice(0, 6).map(s => {
+              const veh = vehicles.find(v => v.id === s.vehicleId);
+              const cust = customers.find(c => c.id === s.customerId);
+              return (
+                <div key={s.id} className="mobile-action-card">
+                  <div className="card-top-row">
+                    <div className="card-plate-badge">
+                      <Truck size={15} color="var(--diza-red)" />
+                      <strong>{veh?.plate || s.vehiclePlate || 'Araç'}</strong>
+                      <span className="card-driver-tag">{veh?.driverName || s.driverName || 'Şoför'}</span>
+                    </div>
+                    <span className="card-status-badge on-road">YOLDA</span>
+                  </div>
+
+                  <div className="card-route-row">
+                    <span className="from-loc">{s.loadingLocation}</span>
+                    <span className="route-arrow">➔</span>
+                    <span className="to-loc">{s.unloadingLocation}</span>
+                  </div>
+
+                  <div className="card-meta-row">
+                    <span>{cust?.name || s.customerName || 'Müşteri'} • {s.goodsType} ({s.quantity} {s.unit || 'Ton'})</span>
+                  </div>
+
+                  <div className="card-bottom-row">
+                    <div className="card-amount">
+                      <span className="label">Navlun:</span>
+                      <strong>{s.totalAmount?.toLocaleString('tr-TR')} ₺</strong>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-success btn-sm card-action-btn"
+                      onClick={() => completeShipment(s.id)}
+                    >
+                      ✓ Teslim Et
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+
+            {onTheRoadShipments.length === 0 && (
+              <div className="mobile-empty-card">
+                Şu anda yolda olan aktif sefer bulunmuyor.
+              </div>
+            )}
           </div>
         </div>
 
@@ -397,7 +448,8 @@ export const DashboardView: React.FC<{
             </button>
           </div>
 
-          <div style={{ overflowX: 'auto', maxHeight: 330, background: '#ffffff' }}>
+          {/* Masaüstü Tablo Görünümü */}
+          <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: 330, background: '#ffffff' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
               <thead>
                 <tr style={{ background: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569', fontWeight: 800 }}>
@@ -458,6 +510,38 @@ export const DashboardView: React.FC<{
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobilde Kasa Kartları */}
+          <div className="mobile-only-cards">
+            {cashEntries.slice(0, 6).map(c => {
+              const isIncome = c.type === 'GIRIS';
+              return (
+                <div key={c.id} className={`mobile-action-card cash-card ${isIncome ? 'income' : 'expense'}`}>
+                  <div className="card-top-row">
+                    <span className={`card-status-badge ${isIncome ? 'income' : 'expense'}`}>
+                      {isIncome ? '↓ KASAYA GİRİŞ' : '↑ KASADAN ÇIKIŞ'}
+                    </span>
+                    <span className="card-date-tag">{c.date}</span>
+                  </div>
+                  <div className="card-meta-row" style={{ marginTop: 6, fontWeight: 700, color: '#0f172a' }}>
+                    {c.description}
+                  </div>
+                  <div className="card-bottom-row" style={{ marginTop: 6 }}>
+                    <span style={{ fontSize: 11, color: '#64748b' }}>{c.category}</span>
+                    <strong style={{ fontSize: 15, fontFamily: 'monospace', color: isIncome ? '#059669' : '#dc2626' }}>
+                      {isIncome ? '+' : '-'}{c.amount?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {c.currency}
+                    </strong>
+                  </div>
+                </div>
+              );
+            })}
+
+            {cashEntries.length === 0 && (
+              <div className="mobile-empty-card">
+                Kayıtlı kasa hareketi bulunmuyor.
+              </div>
+            )}
           </div>
         </div>
       </div>

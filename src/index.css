@@ -1008,6 +1008,519 @@ body {
   }
 }
 
+/* ==========================================================================
+   AKILLI MOBİL İŞLEM KARTLARI, FAB & VERİ GİRİŞ SİHİRBAZI STİLLERİ
+   Gördit Bilgisayar — Zafer GÖRGÜN
+   ========================================================================== */
+
+/* Masaüstü ve Mobil Tablo/Kart Geçişi */
+.desktop-only-table {
+  display: block;
+}
+.mobile-only-cards {
+  display: none !important;
+}
+.mobile-fab-container {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .desktop-only-table {
+    display: none !important;
+  }
+  .mobile-only-cards {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mobile-fab-container {
+    display: block !important;
+  }
+}
+
+/* Mobil İşlem Kartı Tasarımı */
+.mobile-action-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.mobile-action-card:active {
+  transform: scale(0.985);
+}
+.mobile-action-card.selected {
+  background: #fff1f2;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-plate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #0f172a;
+}
+.card-driver-tag {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  color: #475569;
+}
+.card-status-badge {
+  font-size: 10px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.3px;
+}
+.card-status-badge.on-road {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.card-status-badge.invoiced {
+  background: #ecfdf5;
+  color: #047857;
+}
+.card-status-badge.open {
+  background: #fffbeb;
+  color: #b45309;
+}
+.card-status-badge.income {
+  background: #ecfdf5;
+  color: #047857;
+}
+.card-status-badge.expense {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.card-route-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.card-route-row .from-loc {
+  color: #047857;
+}
+.card-route-row .route-arrow {
+  color: #94a3b8;
+  font-size: 14px;
+}
+.card-route-row .to-loc {
+  color: #b91c1c;
+}
+
+.card-meta-row {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.card-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px dashed var(--border-color);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+.card-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.card-amount .label {
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+}
+.card-amount strong {
+  font-size: 15px;
+  font-family: var(--font-mono);
+  color: #0f172a;
+}
+.card-action-btn {
+  padding: 6px 14px !important;
+  font-size: 11.5px !important;
+  border-radius: 8px !important;
+}
+
+.mobile-empty-card {
+  padding: 24px;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 13px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px dashed var(--border-color);
+}
+
+/* Kasa Kartları */
+.mobile-action-card.cash-card.income {
+  border-left: 4px solid #10b981;
+}
+.mobile-action-card.cash-card.expense {
+  border-left: 4px solid #ef4444;
+}
+
+/* FAB (Floating Action Button) */
+.mobile-fab-container {
+  position: fixed;
+  bottom: 74px;
+  right: 18px;
+  z-index: 120;
+}
+.fab-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 119;
+  animation: fadeIn 0.2s ease;
+}
+.mobile-fab-main-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--diza-red) 0%, var(--diza-red-dark) 100%);
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.45);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.mobile-fab-main-btn:active {
+  transform: scale(0.92);
+}
+.mobile-fab-main-btn.active {
+  transform: rotate(90deg);
+  background: #0f172a;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.4);
+}
+
+.fab-menu-options {
+  position: absolute;
+  bottom: 68px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+  animation: slideUp 0.2s ease;
+}
+.fab-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.fab-option-label {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+}
+.fab-option-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+.option-shipment .fab-option-icon {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+.option-cash .fab-option-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+.option-invoice .fab-option-icon {
+  background: linear-gradient(135deg, var(--diza-red) 0%, var(--diza-red-dark) 100%);
+}
+.option-reminder .fab-option-icon {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+/* Mobil Sihirbaz (Wizard & Bottom Sheet) */
+.mobile-wizard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.mobile-wizard-container {
+  background: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.mobile-wizard-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: #ffffff;
+}
+.wizard-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.wizard-header-top h3 {
+  font-size: 17px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+.wizard-header-top p {
+  font-size: 11.5px;
+  color: #64748b;
+  margin: 2px 0 0 0;
+  font-weight: 600;
+}
+.wizard-close-btn {
+  background: #f1f5f9;
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+}
+.wizard-step-progress {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+.wizard-step-progress .step-bar {
+  flex: 1;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+.wizard-step-progress .step-bar.active {
+  background: var(--diza-red);
+}
+
+.mobile-wizard-body {
+  padding: 18px 20px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wizard-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.wizard-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wizard-field label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.wizard-input, .wizard-select {
+  background: #ffffff;
+  border: 1.5px solid var(--border-color);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 16px !important; /* iOS zoom engelleme */
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.wizard-input:focus, .wizard-select:focus {
+  border-color: var(--diza-red);
+  box-shadow: 0 0 0 3px var(--diza-red-glow);
+}
+.large-number-input {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  font-family: var(--font-mono) !important;
+  color: #0f172a;
+}
+.wizard-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Hızlı Çipler (Quick Chips) */
+.quick-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.quick-chip {
+  background: #f1f5f9;
+  border: 1px solid var(--border-color);
+  color: #334155;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  touch-action: manipulation;
+}
+.quick-chip:active {
+  transform: scale(0.95);
+}
+.quick-chip.active {
+  background: var(--diza-red-light);
+  border-color: var(--diza-red);
+  color: var(--diza-red);
+  font-weight: 800;
+}
+
+/* Canlı Özet Kartı */
+.wizard-summary-card {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wizard-summary-card.border-success {
+  border-left: 4px solid #10b981;
+}
+.wizard-summary-card.border-danger {
+  border-left: 4px solid #ef4444;
+}
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12.5px;
+  color: #64748b;
+}
+.summary-line strong {
+  color: #0f172a;
+  font-family: var(--font-mono);
+}
+.summary-line.text-warning {
+  color: #b45309;
+}
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 8px;
+  margin-top: 4px;
+}
+.summary-total span {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #0f172a;
+}
+.summary-total h3 {
+  font-size: 19px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--diza-red);
+  margin: 0;
+}
+
+/* Kasa Gelir/Gider Toggle */
+.cash-type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.type-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-color);
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.type-btn.income.active {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #047857;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+.type-btn.expense.active {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.mobile-wizard-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border-color);
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.wizard-nav-btn {
+  flex: 1;
+  padding: 12px !important;
+  font-size: 14px !important;
+  border-radius: 10px !important;
+}
+
 /* Print Media Styles */
 @media print {
   @page {
@@ -1020,7 +1533,7 @@ body {
     margin: 0 !important;
     padding: 0 !important;
   }
-  .sidebar, .top-header, .bottom-nav, .no-print, button, .modal-header button, .btn {
+  .sidebar, .top-header, .bottom-nav, .mobile-fab-container, .no-print, button, .modal-header button, .btn {
     display: none !important;
   }
   .main-wrapper {

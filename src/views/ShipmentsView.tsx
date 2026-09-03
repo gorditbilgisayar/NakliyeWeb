@@ -439,7 +439,8 @@ export const ShipmentsView: React.FC<{
 
       {/* 3. ANA SEVKİYAT LİSTESİ TABLOSU */}
       <div className="glass-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 8 }}>
-        <div style={{ overflowX: 'auto', maxHeight: 580 }}>
+        {/* Masaüstü Tablosu */}
+        <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: 580 }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
             <thead>
               <tr
@@ -479,21 +480,13 @@ export const ShipmentsView: React.FC<{
                   <tr
                     key={s.id}
                     style={{
+                      background: isSelected ? '#fef2f2' : idx % 2 === 0 ? '#ffffff' : '#f8fafc',
                       borderBottom: '1px solid #e2e8f0',
-                      background: isSelected
-                        ? 'rgba(225, 29, 72, 0.06)'
-                        : idx % 2 === 1 ? '#f8fafc' : '#ffffff',
                       transition: 'background 0.15s'
                     }}
-                    onMouseEnter={e => {
-                      if (!isSelected) e.currentTarget.style.background = '#f1f5f9';
-                    }}
-                    onMouseLeave={e => {
-                      if (!isSelected) e.currentTarget.style.background = idx % 2 === 1 ? '#f8fafc' : '#ffffff';
-                    }}
                   >
-                    {/* Seçim Checkbox */}
-                    <td style={{ padding: '6px 4px', textAlign: 'center', borderRight: '1px solid #e2e8f0' }}>
+                    {/* Çoklu Seçim Checkbox */}
+                    <td style={{ padding: '6px', textAlign: 'center', borderRight: '1px solid #e2e8f0' }}>
                       <input
                         type="checkbox"
                         checked={isSelected}
@@ -503,13 +496,13 @@ export const ShipmentsView: React.FC<{
                     </td>
 
                     {/* Sefer No */}
-                    <td style={{ padding: '6px 8px', fontWeight: 800, color: 'var(--diza-red)', fontFamily: 'monospace', borderRight: '1px solid #e2e8f0' }}>
+                    <td style={{ padding: '6px 8px', fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'monospace', borderRight: '1px solid #e2e8f0' }}>
                       {s.shipmentNo}
                     </td>
 
                     {/* Tarih */}
-                    <td style={{ padding: '6px 8px', textAlign: 'center', color: '#64748b', borderRight: '1px solid #e2e8f0' }}>
-                      {s.loadingDate}
+                    <td style={{ padding: '6px 8px', textAlign: 'center', color: '#64748b', fontSize: 11, borderRight: '1px solid #e2e8f0' }}>
+                      {s.loadingDate || s.orderDate}
                     </td>
 
                     {/* Müşteri / Cari */}
@@ -518,25 +511,23 @@ export const ShipmentsView: React.FC<{
                     </td>
 
                     {/* Güzergah */}
-                    <td style={{ padding: '6px 10px', borderRight: '1px solid #e2e8f0' }}>
-                      <span style={{ color: '#047857', fontWeight: 700 }}>{s.loadingLocation}</span>
-                      <span style={{ margin: '0 4px', color: '#94a3b8' }}>→</span>
-                      <span style={{ color: '#b91c1c', fontWeight: 700 }}>{s.unloadingLocation}</span>
+                    <td style={{ padding: '6px 10px', fontSize: 11.5, borderRight: '1px solid #e2e8f0' }}>
+                      <span style={{ color: '#047857', fontWeight: 700 }}>{s.loadingLocation}</span> → <span style={{ color: '#b91c1c', fontWeight: 700 }}>{s.unloadingLocation}</span>
                     </td>
 
                     {/* Yük Cinsi & Miktar */}
                     <td style={{ padding: '6px 10px', borderRight: '1px solid #e2e8f0' }}>
-                      <div style={{ fontWeight: 700, color: '#0f172a' }}>{s.goodsType}</div>
+                      <div style={{ fontWeight: 700, color: '#334155' }}>{s.goodsType}</div>
                       <div style={{ fontSize: 10.5, color: '#64748b' }}>
-                        {s.quantity} {s.unit} • {s.packaging}
+                        {s.quantity} {s.unit || 'Ton'} • {s.unitPrice?.toLocaleString('tr-TR')} ₺/Birim
                       </div>
                     </td>
 
-                    {/* Araç / Sürücü */}
+                    {/* Araç & Şoför */}
                     <td style={{ padding: '6px 8px', borderRight: '1px solid #e2e8f0' }}>
                       {s.vehiclePlate ? (
                         <div>
-                          <span style={{ fontWeight: 800, color: '#0f172a', background: '#eff6ff', padding: '1px 5px', borderRadius: 3, border: '1px solid #bfdbfe' }}>
+                          <span style={{ background: '#f1f5f9', padding: '2px 5px', borderRadius: 4, fontWeight: 900, color: '#0f172a', fontSize: 11 }}>
                             {s.vehiclePlate}
                           </span>
                           <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{s.driverName || 'Sürücü'}</div>
@@ -584,15 +575,14 @@ export const ShipmentsView: React.FC<{
                             color: '#059669',
                             padding: '3px 8px',
                             borderRadius: 4,
-                            fontSize: 10.5,
-                            fontWeight: 900,
+                            fontSize: 11,
+                            fontWeight: 800,
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: 3
+                            gap: 4
                           }}
-                          title={`Fatura No: ${linkedInvoice?.invoiceNo || 'Kesildi'}`}
                         >
-                          ✓ {linkedInvoice?.invoiceNo || 'Faturalandı'}
+                          <CheckCircle size={12} /> Faturalandı
                         </span>
                       ) : (
                         <span
@@ -601,19 +591,16 @@ export const ShipmentsView: React.FC<{
                             color: '#dc2626',
                             padding: '3px 8px',
                             borderRadius: 4,
-                            fontSize: 10.5,
-                            fontWeight: 900,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 3
+                            fontSize: 11,
+                            fontWeight: 800
                           }}
                         >
-                          ⌛ Bekliyor
+                          Açık (Faturasız)
                         </span>
                       )}
                     </td>
 
-                    {/* İşlem Butonları */}
+                    {/* İşlem */}
                     <td style={{ padding: '6px 8px', textAlign: 'center' }}>
                       {s.invoiced ? (
                         <button
@@ -665,6 +652,79 @@ export const ShipmentsView: React.FC<{
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobilde Dokunmatik Sevkiyat Kartları */}
+        <div className="mobile-only-cards" style={{ padding: '8px' }}>
+          {filteredShipments.map(s => {
+            const isSelected = selectedShipmentIds.includes(s.id);
+            return (
+              <div
+                key={s.id}
+                className={`mobile-action-card ${isSelected ? 'selected' : ''}`}
+                style={{
+                  borderLeft: isSelected ? '4px solid var(--diza-red)' : s.invoiced ? '4px solid #10b981' : '4px solid #f59e0b'
+                }}
+              >
+                <div className="card-top-row">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => handleToggleSelect(s.id)}
+                      style={{ width: 18, height: 18, cursor: 'pointer' }}
+                    />
+                    <span style={{ fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'monospace', fontSize: 13 }}>
+                      {s.shipmentNo}
+                    </span>
+                  </div>
+                  <span className={`card-status-badge ${s.invoiced ? 'invoiced' : 'open'}`}>
+                    {s.invoiced ? 'FATURALANDI' : 'AÇIK (FATURASIZ)'}
+                  </span>
+                </div>
+
+                <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0f172a', margin: '4px 0 2px 0' }}>
+                  {s.customerName}
+                </div>
+
+                <div className="card-route-row">
+                  <span className="from-loc">{s.loadingLocation}</span>
+                  <span className="route-arrow">➔</span>
+                  <span className="to-loc">{s.unloadingLocation}</span>
+                </div>
+
+                <div className="card-meta-row">
+                  <span>{s.goodsType} ({s.quantity} {s.unit || 'Ton'}) • {s.vehiclePlate || 'Araç Atanmamış'}</span>
+                </div>
+
+                <div className="card-bottom-row">
+                  <div className="card-amount">
+                    <span className="label">Navlun:</span>
+                    <strong>{s.totalAmount?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {s.currency}</strong>
+                  </div>
+                  <div>
+                    {!s.invoiced ? (
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleConvertSelectedToInvoice([s.id])}
+                      >
+                        Fatura Kes
+                      </button>
+                    ) : (
+                      <span style={{ fontSize: 11, color: '#059669', fontWeight: 800 }}>✓ Faturalı</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {filteredShipments.length === 0 && (
+            <div className="mobile-empty-card">
+              Kriterlere uygun sevkiyat kaydı bulunamadı.
+            </div>
+          )}
         </div>
 
         {/* Tablo Alt Toplam Özeti */}
