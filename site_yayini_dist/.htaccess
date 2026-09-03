@@ -1,0 +1,35 @@
+# DİZA Lojistik & Filo ERP — Apache / LiteSpeed / cPanel Konfigürasyonu
+# Gördit Bilgisayar — Zafer GÖRGÜN
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # HTTPS Yönlendirmesi (Opsiyonel)
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Gerçek dosya veya dizin varsa doğrudan sun
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+
+  # SPA için tüm istekleri index.html'e yönlendir
+  RewriteRule . index.html [L]
+</IfModule>
+
+# MIME Type Ayarları (JavaScript ve CSS'in doğru yüklenmesi için)
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType image/svg+xml .svg
+  AddType font/woff .woff
+  AddType font/woff2 .woff2
+</IfModule>
+
+# Tarayıcı Önbellek ve Güvenlik Başlıkları
+<IfModule mod_headers.c>
+  Header set Access-Control-Allow-Origin "*"
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
