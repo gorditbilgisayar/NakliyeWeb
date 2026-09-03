@@ -628,30 +628,30 @@ export const ParametersView: React.FC = () => {
 
       {/* 2. ŞİRKET BİLGİLERİ (Gelişmiş Logo Yükleme / Değiştirme / Silme) */}
       {activeSubTab === 'company' && (
-        <form onSubmit={handleSaveCompanySettings} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <form onSubmit={handleSaveCompanySettings} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div
             className="glass-card"
             style={{
-              padding: '24px',
+              padding: '14px 18px',
               background: '#ffffff',
               border: '1.5px solid var(--border-color)',
               display: 'flex',
               flexDirection: 'column',
-              gap: 18
+              gap: 16
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--border-color)', paddingBottom: 14 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--border-color)', paddingBottom: 12, gap: 10 }}>
               <div>
-                <h3 style={{ fontSize: 17, fontWeight: 900, color: '#0f172a', margin: 0 }}>
+                <h3 style={{ fontSize: 16, fontWeight: 900, color: '#0f172a', margin: 0 }}>
                   Resmî Şirket Bilgileri
                 </h3>
-                <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0 }}>
+                <p style={{ fontSize: 11.5, color: 'var(--text-muted)', margin: 0 }}>
                   Faturalarda, zarf baskılarında, ekstre ve resmi evraklarda çıkan gönderici şirket tanımları
                 </p>
               </div>
 
-              <button type="submit" className="btn btn-primary" style={{ padding: '9px 24px', fontWeight: 900, fontSize: 13 }}>
-                <Save size={16} /> Değişiklikleri Kaydet
+              <button type="submit" className="btn btn-primary" style={{ padding: '8px 20px', fontWeight: 900, fontSize: 13 }}>
+                <Save size={15} /> Değişiklikleri Kaydet
               </button>
             </div>
 
@@ -1006,17 +1006,20 @@ export const ParametersView: React.FC = () => {
             overflow: 'hidden',
             border: '1.5px solid var(--border-color)',
             boxShadow: 'var(--shadow-md)',
-            maxWidth: 720
+            maxWidth: 720,
+            width: '100%'
           }}
         >
           <div
             style={{
-              padding: '12px 18px',
+              padding: '12px 16px',
               background: '#f1f5f9',
               borderBottom: '1.5px solid var(--border-color)',
               display: 'flex',
+              flexWrap: 'wrap',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              gap: 8
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -1159,8 +1162,10 @@ export const ParametersView: React.FC = () => {
               background: '#f1f5f9',
               borderBottom: '1px solid var(--border-color)',
               display: 'flex',
+              flexWrap: 'wrap',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              gap: 6
             }}
           >
             <div>
@@ -1874,51 +1879,79 @@ export const ParametersView: React.FC = () => {
             <div style={{ padding: '12px 18px', background: '#f1f5f9', borderBottom: '1px solid var(--border-color)' }}>
               <strong style={{ fontSize: 14, color: '#0f172a' }}>Kasa & Banka Hesap Tanımları</strong>
             </div>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>S.No</th>
-                  <th>Kasa / Hesap Adı</th>
-                  <th>Para Birimi</th>
-                  <th>Hesap Kodu</th>
-                  <th>Durum</th>
-                  <th style={{ width: 90, textAlign: 'center' }}>İşlemler</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cashAccounts.map((ca, idx) => (
-                  <tr key={ca.id}>
-                    <td style={{ textAlign: 'center', fontWeight: 800, color: 'var(--diza-red)' }}>{idx + 1}</td>
-                    <td><strong>{ca.name}</strong> {ca.isDefault && <span style={{ fontSize: 10, color: '#047857', fontWeight: 800 }}>(Varsayılan)</span>}</td>
-                    <td style={{ textAlign: 'center', fontWeight: 800, color: '#1d4ed8' }}>{ca.currency}</td>
-                    <td style={{ fontFamily: 'var(--font-mono)' }}>{ca.code}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      <span className="badge-status badge-teslim">Aktif</span>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
-                        <button
-                          type="button"
-                          onClick={() => setEditingCashAccount(ca)}
-                          style={{ background: 'none', border: 'none', color: '#1d4ed8', cursor: 'pointer', padding: 2 }}
-                          title="Düzelt"
-                        >
-                          <Edit size={14} />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setCashAccounts(prev => prev.filter(c => c.id !== ca.id))}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 2 }}
-                          title="Sil"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
+            <div className="desktop-only-table">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Kasa / Hesap Adı</th>
+                    <th>Para Birimi</th>
+                    <th>Hesap Kodu</th>
+                    <th>Durum</th>
+                    <th style={{ width: 90, textAlign: 'center' }}>İşlemler</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {cashAccounts.map((ca, idx) => (
+                    <tr key={ca.id}>
+                      <td style={{ textAlign: 'center', fontWeight: 800, color: 'var(--diza-red)' }}>{idx + 1}</td>
+                      <td><strong>{ca.name}</strong> {ca.isDefault && <span style={{ fontSize: 10, color: '#047857', fontWeight: 800 }}>(Varsayılan)</span>}</td>
+                      <td style={{ textAlign: 'center', fontWeight: 800, color: '#1d4ed8' }}>{ca.currency}</td>
+                      <td style={{ fontFamily: 'var(--font-mono)' }}>{ca.code}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <span className="badge-status badge-teslim">Aktif</span>
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
+                          <button
+                            type="button"
+                            onClick={() => setEditingCashAccount(ca)}
+                            style={{ background: 'none', border: 'none', color: '#1d4ed8', cursor: 'pointer', padding: 2 }}
+                            title="Düzelt"
+                          >
+                            <Edit size={14} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCashAccounts(prev => prev.filter(c => c.id !== ca.id))}
+                            style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: 2 }}
+                            title="Sil"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobilde Dokunmatik Kasa Tanım Kartları */}
+            <div className="mobile-only-cards" style={{ padding: '10px' }}>
+              {cashAccounts.map(ca => (
+                <div key={ca.id} className="mobile-action-card" style={{ borderLeft: '4px solid #10b981' }}>
+                  <div className="card-top-row">
+                    <strong style={{ fontSize: 13, color: '#0f172a' }}>{ca.name}</strong>
+                    <span style={{ fontSize: 11, fontWeight: 900, color: '#1d4ed8', background: '#eff6ff', padding: '2px 8px', borderRadius: 4 }}>
+                      {ca.currency}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 11.5, color: '#64748b', display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+                    <span>Kod: <strong style={{ fontFamily: 'var(--font-mono)' }}>{ca.code}</strong></span>
+                    {ca.isDefault && <span style={{ color: '#047857', fontWeight: 800 }}>✓ Varsayılan</span>}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 6, borderTop: '1px solid #e2e8f0', paddingTop: 6 }}>
+                    <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditingCashAccount(ca)} style={{ fontSize: 11, padding: '4px 10px' }}>
+                      <Edit size={12} /> Düzelt
+                    </button>
+                    <button type="button" className="btn btn-danger btn-sm" onClick={() => setCashAccounts(prev => prev.filter(c => c.id !== ca.id))} style={{ fontSize: 11, padding: '4px 10px' }}>
+                      <Trash2 size={12} /> Sil
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="glass-card" style={{ padding: 18, background: '#fff' }}>
@@ -2034,9 +2067,9 @@ export const ParametersView: React.FC = () => {
                 </div>
               </div>
 
-              {/* Sabit Yükseklikli 2 Bölümlü Kapsayıcı (Sayfa Aşağı Uzamaz) */}
+              {/* Sabit Yükseklikli 2 Bölümlü Kapsayıcı (Masaüstü) */}
               <div
-                className="responsive-grid-2"
+                className="desktop-only-table responsive-grid-2"
                 style={{
                   maxHeight: 'calc(100vh - 290px)',
                   overflowY: 'auto',
@@ -2157,6 +2190,48 @@ export const ParametersView: React.FC = () => {
                   </table>
                 </div>
               </div>
+
+              {/* Mobilde Dokunmatik Masraf Kartları */}
+              <div className="mobile-only-cards" style={{ padding: '10px', maxHeight: '350px', overflowY: 'auto' }}>
+                {filteredExpenses.map(ec => (
+                  <div key={ec.id} className="mobile-action-card" style={{ borderLeft: '4px solid #3b82f6', padding: '10px 12px' }}>
+                    <div className="card-top-row">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                        <span style={{ fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'var(--font-mono)', fontSize: 13 }}>
+                          #{(ec as any).kategoriNo ?? ec.id}
+                        </span>
+                        <strong style={{ fontSize: 13, color: '#0f172a' }}>{ec.name}</strong>
+                      </div>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: '#1d4ed8', background: '#eff6ff', padding: '2px 6px', borderRadius: 4 }}>
+                        %{ec.vatRate} KDV
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 4 }}>
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => setEditingExpense(ec)}
+                        style={{ fontSize: 11, padding: '3px 8px' }}
+                      >
+                        <Edit size={12} /> Düzelt
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => setExpenseCategories(prev => prev.filter(c => c.id !== ec.id))}
+                        style={{ fontSize: 11, padding: '3px 8px' }}
+                      >
+                        <Trash2 size={12} /> Sil
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                {filteredExpenses.length === 0 && (
+                  <div style={{ textAlign: 'center', padding: 20, color: 'var(--text-muted)', fontSize: 12 }}>
+                    Aramaya uygun masraf kalemi bulunamadı.
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Sağ Panel: + Yeni Masraf Ekle / Düzelt Formu */}
@@ -2236,41 +2311,70 @@ export const ParametersView: React.FC = () => {
 
       {/* 7. FATURA PARAMETRELERİ */}
       {activeSubTab === 'invoices' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div className="responsive-grid-2" style={{ gap: 16 }}>
           {/* Tevkifat Oranları */}
           <div className="glass-card" style={{ padding: 0, background: '#fff', overflow: 'hidden', border: '1.5px solid var(--border-color)' }}>
             <div style={{ padding: '12px 18px', background: '#f1f5f9', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <strong style={{ fontSize: 14, color: '#0f172a' }}>Resmî KDV Tevkifat Oranları</strong>
             </div>
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Tevkifat Tanımı</th>
-                  <th>Oran</th>
-                  <th>GİB Kodu</th>
-                  <th style={{ width: 80, textAlign: 'center' }}>İşlem</th>
-                </tr>
-              </thead>
-              <tbody>
-                {withholdingRates.map(wr => (
-                  <tr key={wr.id}>
-                    <td><strong>{wr.name}</strong></td>
-                    <td style={{ textAlign: 'center', fontWeight: 800, color: 'var(--diza-red)' }}>{wr.numerator}/{wr.denominator}</td>
-                    <td style={{ fontFamily: 'var(--font-mono)', textAlign: 'center' }}>{wr.code}</td>
-                    <td style={{ textAlign: 'center' }}>
-                      <button
-                        type="button"
-                        onClick={() => setEditingWithholding(wr)}
-                        style={{ background: 'none', border: 'none', color: '#1d4ed8', cursor: 'pointer', padding: 2 }}
-                        title="Düzelt"
-                      >
-                        <Edit size={14} />
-                      </button>
-                    </td>
+            
+            {/* Masaüstü Tablo */}
+            <div className="desktop-only-table">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Tevkifat Tanımı</th>
+                    <th>Oran</th>
+                    <th>GİB Kodu</th>
+                    <th style={{ width: 80, textAlign: 'center' }}>İşlem</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {withholdingRates.map(wr => (
+                    <tr key={wr.id}>
+                      <td><strong>{wr.name}</strong></td>
+                      <td style={{ textAlign: 'center', fontWeight: 800, color: 'var(--diza-red)' }}>{wr.numerator}/{wr.denominator}</td>
+                      <td style={{ fontFamily: 'var(--font-mono)', textAlign: 'center' }}>{wr.code}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <button
+                          type="button"
+                          onClick={() => setEditingWithholding(wr)}
+                          style={{ background: 'none', border: 'none', color: '#1d4ed8', cursor: 'pointer', padding: 2 }}
+                          title="Düzelt"
+                        >
+                          <Edit size={14} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobilde Dokunmatik Tevkifat Kartları */}
+            <div className="mobile-only-cards" style={{ padding: '10px' }}>
+              {withholdingRates.map(wr => (
+                <div key={wr.id} className="mobile-action-card" style={{ borderLeft: '4px solid var(--diza-red)', padding: '10px 12px' }}>
+                  <div className="card-top-row">
+                    <strong style={{ fontSize: 13, color: '#0f172a' }}>{wr.name}</strong>
+                    <span style={{ fontSize: 12, fontWeight: 900, color: 'var(--diza-red)', background: '#fef2f2', padding: '2px 8px', borderRadius: 4 }}>
+                      {wr.numerator}/{wr.denominator}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6, fontSize: 11.5, color: '#64748b' }}>
+                    <span>GİB Kodu: <strong style={{ fontFamily: 'var(--font-mono)' }}>{wr.code}</strong></span>
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => setEditingWithholding(wr)}
+                      style={{ fontSize: 11, padding: '3px 8px' }}
+                    >
+                      <Edit size={12} /> Düzelt
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
 
             {editingWithholding && (
               <form onSubmit={handleSaveEditWithholding} style={{ padding: 14, background: '#eff6ff', borderTop: '1.5px solid #bfdbfe', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -2315,7 +2419,7 @@ export const ParametersView: React.FC = () => {
           {/* KDV Oranları ve Fatura Seri Tanımları */}
           <div className="glass-card" style={{ padding: 18, background: '#fff', display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, gap: 4 }}>
                 <h4 style={{ fontSize: 14, fontWeight: 900, color: '#0f172a', margin: 0 }}>
                   KDV Oran Standartları
                 </h4>
@@ -2323,7 +2427,7 @@ export const ParametersView: React.FC = () => {
                   * Tıklayarak varsayılan KDV oranını belirleyin
                 </span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+              <div className="vat-rates-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
                 {vatRates.map(v => (
                   <div
                     key={v.id}
