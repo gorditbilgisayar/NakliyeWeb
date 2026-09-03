@@ -1185,6 +1185,25 @@ body {
     transform-origin: top left;
     max-width: 100% !important;
   }
+
+  /* Mobilde Modal Kartları Tam Ekran veya Bottom-Sheet */
+  .modal-card {
+    width: 96% !important;
+    max-width: 96% !important;
+    max-height: 94vh !important;
+    border-radius: 12px !important;
+  }
+
+  /* Mobil Uyumlu Fatura Kalem Satırı */
+  .invoice-item-mobile-card {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    background: #f8fafc !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    border: 1px solid #cbd5e1 !important;
+  }
 }
 
 @media (max-width: 540px) {

@@ -753,7 +753,7 @@ export const InvoicesView: React.FC<{
                   </button>
                 </div>
 
-                <div style={{ border: '1px solid #e2e8f0', borderRadius: 6, overflow: 'hidden' }}>
+                <div className="desktop-only-table" style={{ border: '1px solid #e2e8f0', borderRadius: 6, overflow: 'hidden' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
                     <thead>
                       <tr style={{ background: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#475569', fontWeight: 800 }}>
@@ -868,6 +868,130 @@ export const InvoicesView: React.FC<{
                       ))}
                     </tbody>
                   </table>
+                </div>
+
+                {/* Mobilde Dokunmatik Kalem Düzenleme Kartları */}
+                <div className="mobile-only-cards">
+                  {editingInvoice.items.map((it, idx) => (
+                    <div
+                      key={it.id || idx}
+                      style={{
+                        background: '#f8fafc',
+                        padding: 12,
+                        borderRadius: 8,
+                        border: '1.5px solid #cbd5e1',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 8
+                      }}
+                    >
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800, display: 'block', marginBottom: 2 }}>Açıklama / Güzergah *</label>
+                          <input
+                            type="text"
+                            value={it.description}
+                            onChange={e => handleEditItemChange(idx, 'description', e.target.value)}
+                            placeholder="Hizmet / Güzergah açıklaması..."
+                            required
+                            style={{ width: '100%', padding: '7px 10px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 13, fontWeight: 700, color: '#0f172a' }}
+                          />
+                        </div>
+
+                        {editingInvoice.items.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveEditItem(idx)}
+                            className="btn btn-danger btn-sm"
+                            style={{ padding: '6px 8px', marginTop: 16 }}
+                            title="Bu Kalemi Sil"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 8, alignItems: 'center' }}>
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Miktar</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={it.quantity}
+                            onChange={e => handleEditItemChange(idx, 'quantity', Number(e.target.value))}
+                            placeholder="Miktar"
+                            required
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, textAlign: 'center', fontWeight: 800 }}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Birim</label>
+                          <select
+                            value={it.unit}
+                            onChange={e => handleEditItemChange(idx, 'unit', e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700 }}
+                          >
+                            <option value="Ton">Ton</option>
+                            <option value="Sefer">Sefer</option>
+                            <option value="Adet">Adet</option>
+                            <option value="Paket">Paket</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Birim Fiyat</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={it.unitPrice}
+                            onChange={e => handleEditItemChange(idx, 'unitPrice', Number(e.target.value))}
+                            placeholder="Birim Fiyat"
+                            required
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, textAlign: 'right', fontWeight: 800, fontFamily: 'monospace' }}
+                          />
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>KDV</label>
+                          <select
+                            value={it.vatRate}
+                            onChange={e => handleEditItemChange(idx, 'vatRate', Number(e.target.value))}
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700, color: '#1d4ed8' }}
+                          >
+                            <option value="20">%20</option>
+                            <option value="10">%10</option>
+                            <option value="1">%1</option>
+                            <option value="0">%0</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Tevkifat</label>
+                          <select
+                            value={it.withholdingRate}
+                            onChange={e => handleEditItemChange(idx, 'withholdingRate', e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700, color: '#dc2626' }}
+                          >
+                            <option value="5/10">5/10</option>
+                            <option value="2/10">2/10</option>
+                            <option value="3/10">3/10</option>
+                            <option value="4/10">4/10</option>
+                            <option value="7/10">7/10</option>
+                            <option value="9/10">9/10</option>
+                            <option value="Yok">Yok</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#059669', fontWeight: 800 }}>Tutar</label>
+                          <div style={{ padding: '6px 8px', background: '#ecfdf5', borderRadius: 5, border: '1px solid #a7f3d0', fontSize: 12, fontWeight: 900, fontFamily: 'monospace', color: '#059669', textAlign: 'right' }}>
+                            {it.total?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -1234,7 +1358,7 @@ export const InvoicesView: React.FC<{
                   <select
                     value={newFormData.customerId}
                     onChange={e => setNewFormData({ ...newFormData, customerId: Number(e.target.value) })}
-                    style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700 }}
+                    style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 13, fontWeight: 800, color: '#0f172a', background: '#fff' }}
                   >
                     {customers.map(c => (
                       <option key={c.id} value={c.id}>
@@ -1251,7 +1375,7 @@ export const InvoicesView: React.FC<{
                   <select
                     value={newFormData.currency}
                     onChange={e => setNewFormData({ ...newFormData, currency: e.target.value as CurrencyType })}
-                    style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 800 }}
+                    style={{ width: '100%', padding: '8px 10px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 13, fontWeight: 800 }}
                   >
                     <option value="TL">TL (Türk Lirası)</option>
                     <option value="USD">USD (Dolar)</option>
@@ -1260,134 +1384,214 @@ export const InvoicesView: React.FC<{
                 </div>
               </div>
 
+              {/* Seçili Cari Doğrulama Rozet Kutusu */}
+              {(() => {
+                const selectedCustomerObj = customers.find(c => c.id === Number(newFormData.customerId));
+                if (!selectedCustomerObj) return null;
+                return (
+                  <div
+                    style={{
+                      background: '#f0f9ff',
+                      border: '1.5px solid #bae6fd',
+                      borderRadius: 8,
+                      padding: '10px 14px',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: 12,
+                      alignItems: 'center',
+                      fontSize: 12,
+                      color: '#0369a1'
+                    }}
+                  >
+                    <div>
+                      <span style={{ color: '#0284c7', fontWeight: 800 }}>FİRMA: </span>
+                      <strong style={{ color: '#0f172a' }}>{selectedCustomerObj.name}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: '#0284c7', fontWeight: 800 }}>YETKİLİ: </span>
+                      <span>{selectedCustomerObj.authorizedFirstName || ''} {selectedCustomerObj.authorizedLastName || selectedCustomerObj.authorizedPerson || 'Yetkili Belirtilmemiş'}</span>
+                    </div>
+                    <div>
+                      <span style={{ color: '#0284c7', fontWeight: 800 }}>VERGİ: </span>
+                      <span>{selectedCustomerObj.taxOffice ? `${selectedCustomerObj.taxOffice} V.D.` : 'V.D. Yok'} • {selectedCustomerObj.taxNumber || 'No Yok'}</span>
+                    </div>
+                    <div>
+                      <span style={{ color: '#0284c7', fontWeight: 800 }}>TEL: </span>
+                      <span style={{ fontFamily: 'var(--font-mono)' }}>{selectedCustomerObj.gsmPhone || selectedCustomerObj.phone || 'Tel Yok'}</span>
+                    </div>
+                    <div style={{ width: '100%', color: '#475569', fontSize: 11.5 }}>
+                      <strong>Fatura Adresi:</strong> {selectedCustomerObj.billingAddress || selectedCustomerObj.address || `${selectedCustomerObj.city || ''} ${selectedCustomerObj.district ? '/' + selectedCustomerObj.district : ''}`}
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Kalemler */}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                  <label style={{ fontSize: 12, fontWeight: 800, color: '#475569' }}>
-                    FATURA KALEMLERİ / HİZMET DETAYLARI
+                  <label style={{ fontSize: 12.5, fontWeight: 900, color: '#0f172a', display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Layers size={15} color="var(--diza-red)" /> FATURA KALEMLERİ & HİZMET DETAYLARI ({newItems.length} Kalem)
                   </label>
-                  <button type="button" className="btn btn-secondary" onClick={handleAddNewItem} style={{ padding: '4px 10px', fontSize: 11 }}>
-                    <Plus size={13} /> Kalem Ekle
+                  <button type="button" className="btn btn-secondary" onClick={handleAddNewItem} style={{ padding: '5px 12px', fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Plus size={14} /> Kalem Ekle
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {newItems.map((it, idx) => (
                     <div
                       key={it.id || idx}
                       style={{
-                        display: 'grid',
-                        gridTemplateColumns: '2fr 80px 80px 100px 80px 90px 30px',
-                        gap: 8,
-                        alignItems: 'center',
                         background: '#f8fafc',
-                        padding: 8,
-                        borderRadius: 6,
-                        border: '1px solid #e2e8f0'
+                        padding: 12,
+                        borderRadius: 8,
+                        border: '1.5px solid #cbd5e1',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 8
                       }}
                     >
-                      <input
-                        type="text"
-                        value={it.description}
-                        onChange={e => handleUpdateNewItem(idx, 'description', e.target.value)}
-                        placeholder="Hizmet / Güzergah Açıklaması"
-                        required
-                        style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5 }}
-                      />
+                      {/* 1. Satır: Açıklama ve Sil Butonu */}
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                        <div style={{ flex: 1 }}>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800, display: 'block', marginBottom: 2 }}>Hizmet / Açıklama *</label>
+                          <input
+                            type="text"
+                            value={it.description}
+                            onChange={e => handleUpdateNewItem(idx, 'description', e.target.value)}
+                            placeholder="Örn: Mersin - Mardin Dökme Maden Taşımacılığı Hizmeti"
+                            required
+                            style={{ width: '100%', padding: '7px 10px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 13, fontWeight: 700, color: '#0f172a' }}
+                          />
+                        </div>
 
-                      <input
-                        type="number"
-                        step="0.01"
-                        value={it.quantity}
-                        onChange={e => handleUpdateNewItem(idx, 'quantity', Number(e.target.value))}
-                        placeholder="Miktar"
-                        required
-                        style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5, textAlign: 'center' }}
-                      />
+                        {newItems.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveNewItem(idx)}
+                            className="btn btn-danger btn-sm"
+                            style={{ padding: '6px 8px', marginTop: 16 }}
+                            title="Bu Kalemi Sil"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
 
-                      <select
-                        value={it.unit}
-                        onChange={e => handleUpdateNewItem(idx, 'unit', e.target.value)}
-                        style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5 }}
-                      >
-                        <option value="Ton">Ton</option>
-                        <option value="Sefer">Sefer</option>
-                        <option value="Adet">Adet</option>
-                      </select>
+                      {/* 2. Satır: Miktar, Birim, Fiyat, KDV, Tevkifat, Tutar */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 8, alignItems: 'center' }}>
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Miktar</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={it.quantity}
+                            onChange={e => handleUpdateNewItem(idx, 'quantity', Number(e.target.value))}
+                            placeholder="Miktar"
+                            required
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, textAlign: 'center', fontWeight: 800 }}
+                          />
+                        </div>
 
-                      <input
-                        type="number"
-                        step="0.01"
-                        value={it.unitPrice}
-                        onChange={e => handleUpdateNewItem(idx, 'unitPrice', Number(e.target.value))}
-                        placeholder="Fiyat"
-                        required
-                        style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5, textAlign: 'right' }}
-                      />
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Birim</label>
+                          <select
+                            value={it.unit}
+                            onChange={e => handleUpdateNewItem(idx, 'unit', e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700 }}
+                          >
+                            <option value="Ton">Ton</option>
+                            <option value="Sefer">Sefer</option>
+                            <option value="Adet">Adet</option>
+                            <option value="Paket">Paket</option>
+                          </select>
+                        </div>
 
-                      <select
-                        value={it.vatRate}
-                        onChange={e => handleUpdateNewItem(idx, 'vatRate', Number(e.target.value))}
-                        style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5 }}
-                      >
-                        <option value="20">%20 (Genel)</option>
-                        <option value="10">%10 (İndirimli)</option>
-                        <option value="1">%1 (Tarım)</option>
-                        <option value="0">%0 (İstisna)</option>
-                      </select>
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Birim Fiyat</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={it.unitPrice}
+                            onChange={e => handleUpdateNewItem(idx, 'unitPrice', Number(e.target.value))}
+                            placeholder="Birim Fiyat"
+                            required
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, textAlign: 'right', fontWeight: 800, fontFamily: 'monospace' }}
+                          />
+                        </div>
 
-                      <select
-                        value={it.withholdingRate}
-                        onChange={e => handleUpdateNewItem(idx, 'withholdingRate', e.target.value)}
-                        style={{ padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5 }}
-                      >
-                        <option value="5/10">5/10 (Taşıma)</option>
-                        <option value="2/10">2/10</option>
-                        <option value="3/10">3/10</option>
-                        <option value="4/10">4/10</option>
-                        <option value="7/10">7/10</option>
-                        <option value="9/10">9/10</option>
-                        <option value="Yok">Yok</option>
-                      </select>
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>KDV Oranı</label>
+                          <select
+                            value={it.vatRate}
+                            onChange={e => handleUpdateNewItem(idx, 'vatRate', Number(e.target.value))}
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700, color: '#1d4ed8' }}
+                          >
+                            <option value="20">%20 (Genel)</option>
+                            <option value="10">%10 (İndirimli)</option>
+                            <option value="1">%1 (Tarım)</option>
+                            <option value="0">%0 (İstisna)</option>
+                          </select>
+                        </div>
 
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveNewItem(idx)}
-                        style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#64748b', fontWeight: 800 }}>Tevkifat</label>
+                          <select
+                            value={it.withholdingRate}
+                            onChange={e => handleUpdateNewItem(idx, 'withholdingRate', e.target.value)}
+                            style={{ width: '100%', padding: '6px 8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12, fontWeight: 700, color: '#dc2626' }}
+                          >
+                            <option value="5/10">5/10 (Taşıma)</option>
+                            <option value="2/10">2/10</option>
+                            <option value="3/10">3/10</option>
+                            <option value="4/10">4/10</option>
+                            <option value="7/10">7/10</option>
+                            <option value="9/10">9/10</option>
+                            <option value="Yok">Tevkifatsız</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label style={{ fontSize: 10.5, color: '#059669', fontWeight: 800 }}>Kalem Tutarı</label>
+                          <div style={{ padding: '6px 8px', background: '#ecfdf5', borderRadius: 5, border: '1px solid #a7f3d0', fontSize: 12, fontWeight: 900, fontFamily: 'monospace', color: '#059669', textAlign: 'right' }}>
+                            {(Number(it.quantity || 0) * Number(it.unitPrice || 0)).toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {newFormData.currency}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Not & Toplam */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 14, background: '#f8fafc', padding: 12, borderRadius: 6, border: '1px solid #e2e8f0' }}>
-                <textarea
-                  value={newFormData.notes}
-                  onChange={e => setNewFormData({ ...newFormData, notes: e.target.value })}
-                  rows={2}
-                  placeholder="Fatura notu..."
-                  style={{ width: '100%', padding: '6px', border: '1px solid #cbd5e1', borderRadius: 4, fontSize: 11.5 }}
-                />
+              {/* Not & Toplam Özeti */}
+              <div className="responsive-grid-2" style={{ background: '#f8fafc', padding: 14, borderRadius: 8, border: '1px solid #e2e8f0', gap: 14 }}>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 800, color: '#475569', display: 'block', marginBottom: 4 }}>Fatura Genel Notu</label>
+                  <textarea
+                    value={newFormData.notes}
+                    onChange={e => setNewFormData({ ...newFormData, notes: e.target.value })}
+                    rows={3}
+                    placeholder="Tevkifat kapsamı, ödeme vadesi veya sevkiyat notu..."
+                    style={{ width: '100%', padding: '8px', border: '1px solid #cbd5e1', borderRadius: 5, fontSize: 12 }}
+                  />
+                </div>
 
-                <div style={{ fontSize: 12, display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <div style={{ fontSize: 12, display: 'flex', flexDirection: 'column', gap: 6, background: '#ffffff', padding: 12, borderRadius: 6, border: '1px solid #e2e8f0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Matrah:</span>
-                    <strong>{newTotals.subTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺</strong>
+                    <span style={{ color: '#64748b' }}>Toplam Matrah:</span>
+                    <strong>{newTotals.subTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {newFormData.currency}</strong>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', color: '#2563eb' }}>
-                    <span>KDV (%20):</span>
-                    <strong>+{newTotals.vatTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺</strong>
+                    <span>Hesaplanan KDV (%20):</span>
+                    <strong>+{newTotals.vatTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {newFormData.currency}</strong>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', color: '#dc2626' }}>
-                    <span>Tevkifat (5/10):</span>
-                    <strong>-{newTotals.withholdingTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺</strong>
+                    <span>Tevkifat Tutarı:</span>
+                    <strong>-{newTotals.withholdingTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {newFormData.currency}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #cbd5e1', paddingTop: 4, color: '#059669', fontSize: 13 }}>
-                    <span>Genel Toplam:</span>
-                    <strong>{newTotals.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺</strong>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '2px solid #e2e8f0', paddingTop: 6, color: '#059669', fontSize: 14 }}>
+                    <span style={{ fontWeight: 900 }}>ÖDENECEK GENEL TOPLAM:</span>
+                    <strong style={{ fontFamily: 'monospace', fontSize: 16 }}>{newTotals.grandTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {newFormData.currency}</strong>
                   </div>
                 </div>
               </div>

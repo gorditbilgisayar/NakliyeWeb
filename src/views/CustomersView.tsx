@@ -582,13 +582,14 @@ export const CustomersView: React.FC = () => {
               style={{
                 background: '#ffffff',
                 borderBottom: '2px solid var(--border-color)',
-                padding: '16px 24px',
+                padding: '14px 18px',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center'
+                alignItems: 'center',
+                gap: 10
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, overflow: 'hidden' }}>
                 <div
                   style={{
                     width: 36,
@@ -598,17 +599,18 @@ export const CustomersView: React.FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: editingCustomer ? '#1d4ed8' : 'var(--diza-red)'
+                    color: editingCustomer ? '#1d4ed8' : 'var(--diza-red)',
+                    flexShrink: 0
                   }}
                 >
-                  {editingCustomer ? <Edit size={20} /> : <Building size={20} />}
+                  {editingCustomer ? <Edit size={18} /> : <Building size={18} />}
                 </div>
-                <div>
-                  <h3 style={{ fontSize: 17, fontWeight: 900, color: '#0f172a', margin: 0 }}>
-                    {editingCustomer ? `Firma Bilgilerini Düzelt — ${editingCustomer.name}` : 'Yeni Firma & Cari Kartı Ekle'}
+                <div style={{ overflow: 'hidden' }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 900, color: '#0f172a', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {editingCustomer ? `Firma Düzelt: ${editingCustomer.name}` : 'Yeni Firma & Cari Kartı Ekle'}
                   </h3>
                   <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: 0 }}>
-                    {editingCustomer ? 'Firma bilgileri, yetkili, il/ilçe, adres ve telefon güncellemeleri' : 'Firma ticari ünvanı, yetkili, hazır 81 il/ilçe, fatura ve iletişim tanımları'}
+                    {editingCustomer ? 'Firma bilgileri, yetkili, il/ilçe ve telefon güncellemeleri' : 'Ticari ünvan, 81 il/ilçe, fatura ve iletişim tanımları'}
                   </p>
                 </div>
               </div>
@@ -617,7 +619,7 @@ export const CustomersView: React.FC = () => {
                 type="button"
                 className="btn btn-secondary btn-sm"
                 onClick={() => setIsModalOpen(false)}
-                style={{ padding: '6px 8px' }}
+                style={{ padding: '6px 8px', flexShrink: 0 }}
               >
                 <X size={18} />
               </button>
@@ -627,10 +629,10 @@ export const CustomersView: React.FC = () => {
               <div
                 className="modal-body"
                 style={{
-                  padding: '20px 24px',
+                  padding: '16px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 16,
+                  gap: 14,
                   maxHeight: '75vh',
                   overflowY: 'auto'
                 }}
@@ -890,10 +892,11 @@ export const CustomersView: React.FC = () => {
                 style={{
                   background: '#f8fafc',
                   borderTop: '2px solid var(--border-color)',
-                  padding: '14px 24px',
+                  padding: '12px 18px',
                   display: 'flex',
                   justifyContent: 'flex-end',
-                  gap: 10
+                  gap: 10,
+                  flexWrap: 'wrap'
                 }}
               >
                 <button
