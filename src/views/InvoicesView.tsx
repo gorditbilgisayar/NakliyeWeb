@@ -647,7 +647,7 @@ export const InvoicesView: React.FC<{
             {/* Modal Header */}
             <div
               style={{
-                padding: '14px 20px',
+                padding: '10px 14px',
                 borderBottom: '1px solid #e2e8f0',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -661,7 +661,7 @@ export const InvoicesView: React.FC<{
                   <FileText size={18} color="#ffffff" />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: 15, fontWeight: 900, margin: 0, color: '#ffffff' }}>
+                  <h3 style={{ fontSize: 14, fontWeight: 900, margin: 0, color: '#ffffff' }}>
                     Fatura Detayı & Kalem Düzenleme
                   </h3>
                   <p style={{ fontSize: 11, color: '#94a3b8', margin: 0 }}>
@@ -679,9 +679,9 @@ export const InvoicesView: React.FC<{
             </div>
 
             {/* Modal Form Gövdesi */}
-            <form onSubmit={handleSaveEditedInvoice} style={{ overflowY: 'auto', flex: 1, padding: 20, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form onSubmit={handleSaveEditedInvoice} style={{ overflowY: 'auto', flex: 1, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 12 }}>
               {/* Üst Fatura Başlık Alanları */}
-              <div style={{ background: '#f8fafc', padding: 14, borderRadius: 8, border: '1px solid #e2e8f0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12 }}>
+              <div style={{ background: '#f8fafc', padding: 10, borderRadius: 8, border: '1px solid #e2e8f0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10 }}>
                 <div>
                   <label style={{ fontSize: 11, fontWeight: 700, color: '#64748b', display: 'block', marginBottom: 4 }}>
                     Fatura No
@@ -1286,13 +1286,13 @@ export const InvoicesView: React.FC<{
           }}
         >
           <div
-            className="glass-card"
+            className="modal-card"
             style={{
               background: '#ffffff',
               borderRadius: 10,
               width: 900,
-              maxWidth: '95vw',
-              maxHeight: '90vh',
+              maxWidth: '98vw',
+              maxHeight: '94vh',
               overflowY: 'auto',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
               padding: 0
@@ -1301,7 +1301,7 @@ export const InvoicesView: React.FC<{
             {/* Modal Header */}
             <div
               style={{
-                padding: '14px 20px',
+                padding: '10px 14px',
                 borderBottom: '1px solid #e2e8f0',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -1310,7 +1310,7 @@ export const InvoicesView: React.FC<{
                 color: '#ffffff'
               }}
             >
-              <h3 style={{ fontSize: 15, fontWeight: 900, margin: 0, color: '#ffffff' }}>
+              <h3 style={{ fontSize: 14, fontWeight: 900, margin: 0, color: '#ffffff' }}>
                 Yeni e-Fatura / Tevkifatlı Fatura Düzenle
               </h3>
               <button
@@ -1323,8 +1323,8 @@ export const InvoicesView: React.FC<{
             </div>
 
             {/* Modal Form */}
-            <form onSubmit={handleSaveNewInvoice} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
+            <form onSubmit={handleSaveNewInvoice} style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 10 }}>
                 <div>
                   <label style={{ fontSize: 11.5, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 4 }}>
                     Fatura No *

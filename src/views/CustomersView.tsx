@@ -648,7 +648,7 @@ export const CustomersView: React.FC = () => {
                     placeholder="Örn: Toroslar Demir Çelik Sanayi ve Tic. A.Ş."
                     value={formData.name || ''}
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    style={{ fontSize: 14, fontWeight: 700 }}
+                    style={{ fontWeight: 700 }}
                     required
                   />
                 </div>
@@ -687,8 +687,8 @@ export const CustomersView: React.FC = () => {
                   className="customer-grid-row-2"
                   style={{
                     background: '#f8fafc',
-                    padding: 14,
-                    borderRadius: 'var(--radius-lg)',
+                    padding: 10,
+                    borderRadius: 'var(--radius-md)',
                     border: '1.5px solid var(--border-color)'
                   }}
                 >

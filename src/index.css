@@ -1117,6 +1117,65 @@ body {
 }
 
 @media (max-width: 992px) {
+  /* Kök font boyutunu ve boşlukları küçülterek ekrana tam sığma */
+  html {
+    font-size: 13.5px !important;
+  }
+  body {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+
+  .content-area {
+    padding: 10px 12px !important;
+  }
+
+  .glass-card {
+    padding: 14px 14px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Başlıkları ve metinleri orantılı küçültme */
+  h1 { font-size: 18px !important; }
+  h2 { font-size: 16px !important; }
+  h3 { font-size: 14px !important; }
+  h4 { font-size: 13px !important; }
+
+  /* Butonlar ve Form Elemanları */
+  .btn {
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+  }
+  .btn-sm {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .form-group {
+    margin-bottom: 10px !important;
+    gap: 4px !important;
+  }
+  .form-group label {
+    font-size: 10.5px !important;
+    letter-spacing: 0.3px !important;
+  }
+  .form-control {
+    padding: 7px 10px !important;
+    font-size: 12.5px !important;
+    border-radius: 6px !important;
+  }
+
+  /* Tablolar */
+  .data-table th {
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+  }
+  .data-table td {
+    padding: 8px 10px !important;
+    font-size: 11.5px !important;
+  }
+
   .desktop-only-table {
     display: none !important;
   }
@@ -1132,15 +1191,15 @@ body {
   /* Araç Kayıt Formu Mobilde Tek Sütun */
   .vehicle-reg-top-bar {
     grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
   .vehicle-reg-main-grid {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 12px !important;
   }
   .vehicle-reg-form-cols {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 10px !important;
   }
   .vehicle-reg-field-row {
     grid-template-columns: 1fr !important;
@@ -1158,11 +1217,11 @@ body {
   }
   .customer-grid-row-3 {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
   .customer-grid-row-2 {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
 
   /* Evrensel Gridler Mobilde Tek Sütun */
@@ -1170,7 +1229,7 @@ body {
   .responsive-grid-3,
   .responsive-grid-4 {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
 
   /* Tabloların Taşmasını Önleme */
@@ -1191,24 +1250,56 @@ body {
     width: 96% !important;
     max-width: 96% !important;
     max-height: 94vh !important;
-    border-radius: 12px !important;
+    border-radius: 10px !important;
+  }
+  .modal-header {
+    padding: 10px 14px !important;
+  }
+  .modal-header h3 {
+    font-size: 14px !important;
+  }
+  .modal-body {
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+  .modal-footer {
+    padding: 10px 14px !important;
   }
 
   /* Mobil Uyumlu Fatura Kalem Satırı */
   .invoice-item-mobile-card {
     display: flex !important;
     flex-direction: column !important;
-    gap: 8px !important;
+    gap: 6px !important;
     background: #f8fafc !important;
-    padding: 12px !important;
+    padding: 10px !important;
     border-radius: 8px !important;
     border: 1px solid #cbd5e1 !important;
   }
 }
 
 @media (max-width: 540px) {
+  html {
+    font-size: 13px !important;
+  }
+  .content-area {
+    padding: 8px 8px !important;
+  }
+  .glass-card {
+    padding: 10px 10px !important;
+  }
   .vehicle-reg-top-bar {
     grid-template-columns: 1fr !important;
+  }
+  .top-header {
+    padding: 6px 10px !important;
+  }
+  .header-rates-bar {
+    gap: 4px !important;
+    font-size: 10.5px !important;
+  }
+  .mobile-action-card {
+    padding: 10px 10px !important;
   }
 }
 
