@@ -93,8 +93,8 @@ export const EnvelopePrintView: React.FC = () => {
         </div>
       </div>
 
-      {/* ZARF ÖNİZLEME ALANI */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+      {/* ZARF ÖNİZLEME ALANI (Mobilde yatay kaydırma korumalı) */}
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0', overflowX: 'auto', WebkitOverflowScrolling: 'touch', width: '100%' }}>
         {envelopeType === 'KUCUK' ? (
           /* KÜÇÜK DİPLOMAT ZARF (110mm x 220mm standart oran) */
           <div

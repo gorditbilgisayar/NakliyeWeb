@@ -155,7 +155,7 @@ export const CashBookView: React.FC<{
       </div>
 
       {/* 3. Kasa Defteri Tablosu */}
-      <div className="table-responsive">
+      <div className="table-responsive desktop-only-table">
         <table className="data-table">
           <thead>
             <tr>
@@ -213,6 +213,69 @@ export const CashBookView: React.FC<{
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobilde Dokunmatik Kasa Kartları */}
+      <div className="mobile-only-cards">
+        {filteredEntries.map(c => (
+          <div
+            key={c.id}
+            className="mobile-action-card"
+            style={{
+              borderLeft: c.type === 'GIRIS' ? '4px solid #10b981' : '4px solid #ef4444'
+            }}
+          >
+            <div className="card-top-row">
+              <span className={`badge-status ${c.type === 'GIRIS' ? 'badge-teslim' : 'badge-fatura'}`}>
+                {c.type === 'GIRIS' ? '✓ TAHSİLAT (GİRİŞ)' : '↗ TEDİYE (ÇIKIŞ)'}
+              </span>
+              <span className="card-date-tag">{formatDate(c.date)} {c.time}</span>
+            </div>
+
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#0f172a', margin: '4px 0 2px 0' }}>
+              {c.category}
+            </div>
+
+            <div style={{ fontSize: 12, color: '#475569' }}>
+              <strong>İlgili:</strong> {c.recipientOrSender} {c.vehiclePlate ? `• Plaka: ${c.vehiclePlate}` : ''}
+            </div>
+
+            {c.description && (
+              <div style={{ fontSize: 11.5, color: '#64748b', fontStyle: 'italic', margin: '3px 0' }}>
+                {c.description}
+              </div>
+            )}
+
+            <div className="card-bottom-row" style={{ marginTop: 6 }}>
+              <div>
+                <strong
+                  style={{
+                    fontSize: 16,
+                    fontFamily: 'var(--font-mono)',
+                    color: c.type === 'GIRIS' ? '#10b981' : '#ef4444'
+                  }}
+                >
+                  {c.type === 'GIRIS' ? '+' : '-'} {formatCurrency(c.amount, c.currency)}
+                </strong>
+              </div>
+
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => deleteCashEntry(c.id)}
+                title="Hareketi Sil"
+                style={{ padding: '5px 9px' }}
+              >
+                <Trash2 size={13} />
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {filteredEntries.length === 0 && (
+          <div style={{ padding: 24, textAlign: 'center', color: '#94a3b8', fontSize: 12 }}>
+            Kasa hareketi bulunamadı.
+          </div>
+        )}
       </div>
 
       {/* 4. Yeni Kasa Hareketi Modal */}

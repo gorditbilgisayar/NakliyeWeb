@@ -94,7 +94,7 @@ export const Sidebar: React.FC<{
       <div className="sidebar-footer">
         <strong>Gördit Bilgisayar</strong>
         <p>Zafer GÖRGÜN © 2026</p>
-        <span style={{ fontSize: '10px', color: 'var(--diza-red)', fontWeight: 800 }}>v2.5.4 Kurumsal</span>
+        <span style={{ fontSize: '10px', color: 'var(--diza-red)', fontWeight: 800 }}>v2.5.5 Kurumsal</span>
       </div>
     </aside>
     </>

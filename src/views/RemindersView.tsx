@@ -112,7 +112,7 @@ export const RemindersView: React.FC = () => {
       </div>
 
       {/* Evrak Tablosu */}
-      <div className="table-responsive">
+      <div className="table-responsive desktop-only-table">
         <table className="data-table">
           <thead>
             <tr>
@@ -193,6 +193,90 @@ export const RemindersView: React.FC = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobilde Dokunmatik Çek & Senet Kartları */}
+      <div className="mobile-only-cards">
+        {filtered.map(r => (
+          <div
+            key={r.id}
+            className="mobile-action-card"
+            style={{
+              borderLeft: r.direction === 'ALACAK' ? '4px solid #10b981' : '4px solid #ef4444'
+            }}
+          >
+            <div className="card-top-row">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span className="badge-status badge-siparis">{r.type}</span>
+                <span className={`badge-status ${r.direction === 'ALACAK' ? 'badge-teslim' : 'badge-fatura'}`}>
+                  {r.direction === 'ALACAK' ? 'TAHSİLAT' : 'ÖDEME'}
+                </span>
+              </div>
+              <span className="card-date-tag">Vade: {formatDate(r.dueDate)}</span>
+            </div>
+
+            <div style={{ fontSize: 14, fontWeight: 800, color: '#0f172a', margin: '4px 0 2px 0' }}>
+              {r.issuer}
+            </div>
+
+            {r.customerName && (
+              <div style={{ fontSize: 11.5, color: '#64748b' }}>
+                Cari Hesap: <strong>{r.customerName}</strong>
+              </div>
+            )}
+
+            <div style={{ fontSize: 11.5, color: '#475569', margin: '2px 0' }}>
+              {r.bankName || 'Banka Belirtilmemiş'} {r.checkNo ? `• Çek No: ${r.checkNo}` : ''}
+            </div>
+
+            <div className="card-bottom-row" style={{ marginTop: 6 }}>
+              <div>
+                <strong style={{ fontSize: 16, fontFamily: 'var(--font-mono)', color: '#0f172a' }}>
+                  {formatCurrency(r.amount, r.currency)}
+                </strong>
+                <div style={{ marginTop: 2 }}>
+                  <span
+                    className={`badge-status ${
+                      r.status === 'BEKLIYOR' ? 'badge-yolda' :
+                      r.status === 'TAHSIL_EDILDI' || r.status === 'ODENDI' ? 'badge-teslim' : 'badge-risk'
+                    }`}
+                  >
+                    {r.status === 'BEKLIYOR' ? 'BEKLİYOR' :
+                     r.status === 'TAHSIL_EDILDI' ? 'TAHSİL EDİLDİ' :
+                     r.status === 'ODENDI' ? 'ÖDENDİ' : 'KARŞILIKSIZ'}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: 6 }}>
+                {r.status === 'BEKLIYOR' && (
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => handleCollectToCash(r)}
+                    style={{ padding: '6px 10px', fontSize: 11.5 }}
+                    title="Tahsil Et ve Kasaya İşle"
+                  >
+                    <CheckCircle size={13} /> {r.direction === 'ALACAK' ? 'Kasaya Al' : 'Öde'}
+                  </button>
+                )}
+                <button
+                  className="btn btn-danger btn-sm"
+                  onClick={() => deleteReminder(r.id)}
+                  style={{ padding: '6px 8px' }}
+                  title="Sil"
+                >
+                  <Trash2 size={13} />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {filtered.length === 0 && (
+          <div style={{ padding: 24, textAlign: 'center', color: '#94a3b8', fontSize: 12 }}>
+            Kayıt bulunamadı.
+          </div>
+        )}
       </div>
 
       {/* Yeni Çek / Senet Modal */}

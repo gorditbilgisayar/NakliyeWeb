@@ -340,7 +340,7 @@ export const InvoicesView: React.FC<{
 
       {/* 2. FATURA LİSTESİ TABLOSU */}
       <div className="glass-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 8 }}>
-        <div style={{ overflowX: 'auto', maxHeight: 580 }}>
+        <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: 580 }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11.5 }}>
             <thead>
               <tr
@@ -494,6 +494,90 @@ export const InvoicesView: React.FC<{
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobilde Dokunmatik Fatura Kartları */}
+        <div className="mobile-only-cards" style={{ padding: '12px' }}>
+          {filteredInvoices.map(inv => (
+            <div
+              key={inv.id}
+              className="mobile-action-card"
+              style={{
+                borderLeft: inv.paymentStatus === 'ODENDI' ? '4px solid #10b981' : '4px solid #ef4444'
+              }}
+            >
+              <div className="card-top-row">
+                <span style={{ fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'monospace', fontSize: 13 }}>
+                  {inv.invoiceNo}
+                </span>
+                <span className="card-date-tag">{inv.invoiceDate}</span>
+              </div>
+
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#0f172a', margin: '3px 0' }}>
+                {inv.customerName}
+              </div>
+
+              {inv.taxOffice && (
+                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
+                  {inv.taxOffice} V.D. • {inv.taxNumber}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '6px 10px', borderRadius: 6, margin: '4px 0' }}>
+                <span style={{ fontSize: 11, color: '#64748b' }}>Matrah: {inv.subTotal?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {inv.currency}</span>
+                <span style={{ fontSize: 11, color: '#dc2626', fontWeight: 700 }}>Tevkifat: -{inv.withholdingTotal?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+              </div>
+
+              <div className="card-bottom-row" style={{ marginTop: 6 }}>
+                <div>
+                  <div style={{ fontSize: 10.5, color: '#64748b', fontWeight: 700 }}>ÖDENECEK GENEL TOPLAM</div>
+                  <strong style={{ fontSize: 16, fontFamily: 'monospace', color: '#059669' }}>
+                    {inv.grandTotal?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {inv.currency}
+                  </strong>
+                </div>
+
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => handleOpenEdit(inv)}
+                    style={{ padding: '5px 8px', fontSize: 11 }}
+                    title="İncele & Düzenle"
+                  >
+                    <Edit size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setPrintInvoice(inv)}
+                    style={{ padding: '5px 8px', fontSize: 11, color: '#1d4ed8' }}
+                    title="Yazdır"
+                  >
+                    <Printer size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={() => {
+                      if (window.confirm(`${inv.invoiceNo} numaralı faturayı silmek istediğinize emin misiniz?`)) {
+                        deleteInvoice(inv.id);
+                      }
+                    }}
+                    style={{ padding: '5px 8px', fontSize: 11 }}
+                    title="Sil"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {filteredInvoices.length === 0 && (
+            <div style={{ padding: 24, textAlign: 'center', color: '#94a3b8', fontSize: 12 }}>
+              Kayıtlı fatura bulunamadı.
+            </div>
+          )}
         </div>
 
         {/* Tablo Alt Toplam Özeti */}

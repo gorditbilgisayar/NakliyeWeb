@@ -474,14 +474,10 @@ export const ParametersView: React.FC = () => {
 
       {/* 1. DİZA PARAMETRE BUTONLARI (Şirket Bilgileri, CİNSİ, Sipariş, Kasa, Masraf, Fatura) */}
       <div
-        className="glass-card"
+        className="glass-card scrollable-tabs-bar"
         style={{
           padding: '12px 18px',
           background: '#ffffff',
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: 10,
-          alignItems: 'center',
           borderLeft: '4px solid var(--diza-red)'
         }}
       >
@@ -660,7 +656,7 @@ export const ParametersView: React.FC = () => {
             </div>
 
             {/* 1. Satır: Logo Yönetimi ve Şirket Ünvanı */}
-            <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 20, alignItems: 'center' }}>
+            <div className="responsive-grid-2" style={{ alignItems: 'center' }}>
               {/* Logo Alanı (Yükle / Değiştir / Sil Butonları) */}
               <div
                 style={{
@@ -752,7 +748,7 @@ export const ParametersView: React.FC = () => {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                <div className="responsive-grid-2">
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase' }}>
                       MARKA / KISA AD
@@ -784,7 +780,7 @@ export const ParametersView: React.FC = () => {
             </div>
 
             {/* 2. Satır: İl, İlçe, Adres */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr', gap: 14 }}>
+            <div className="responsive-grid-3">
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase' }}>
                   İL (ŞEHİR)
@@ -832,7 +828,7 @@ export const ParametersView: React.FC = () => {
             </div>
 
             {/* 3. Satır: Telefonlar ve İletişim */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }}>
+            <div className="responsive-grid-4">
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase' }}>
                   SABİT TELEFON
@@ -889,7 +885,7 @@ export const ParametersView: React.FC = () => {
             </div>
 
             {/* 4. Satır: Vergi, Ticaret Sicil ve Mersis */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }}>
+            <div className="responsive-grid-4">
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase' }}>
                   VERGİ DAİRESİ
@@ -943,7 +939,7 @@ export const ParametersView: React.FC = () => {
             </div>
 
             {/* 5. Satır: IBAN Bilgileri */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+            <div className="responsive-grid-3">
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label style={{ fontSize: 11, fontWeight: 900, color: '#1e293b', textTransform: 'uppercase' }}>
                   TL BANKA HESABI (IBAN)
@@ -1180,7 +1176,7 @@ export const ParametersView: React.FC = () => {
             </span>
           </div>
 
-          <div style={{ overflowX: 'auto', maxHeight: '480px' }}>
+          <div className="desktop-only-table" style={{ overflowX: 'auto', maxHeight: '480px' }}>
             <table
               style={{
                 width: '100%',
@@ -1805,12 +1801,75 @@ export const ParametersView: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Mobilde Dokunmatik Sipariş & Yük Parametre Kartları */}
+          <div className="mobile-only-cards" style={{ padding: '12px' }}>
+            {orderParamRows.map(r => (
+              <div
+                key={r.id}
+                className="mobile-action-card"
+                style={{
+                  borderLeft: '4px solid var(--diza-red)'
+                }}
+              >
+                <div className="card-top-row">
+                  <span style={{ fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'monospace' }}>
+                    Sipariş #{r.sip_id}
+                  </span>
+                  <span className="card-date-tag">{r.goodsType || 'Emtia'}</span>
+                </div>
+
+                <div style={{ fontSize: 14, fontWeight: 800, color: '#0f172a', margin: '3px 0' }}>
+                  {r.loadTitle || 'İsimsiz Yük Tanımı'}
+                </div>
+
+                <div style={{ fontSize: 12, color: '#475569' }}>
+                  <strong>Firma:</strong> {r.company || '-'}
+                </div>
+
+                <div style={{ fontSize: 12, color: '#16a34a', fontWeight: 700, margin: '2px 0' }}>
+                  {r.loadingPlace || 'Mersin'} ➔ {r.unloadingPlace || 'Mardin'} ({r.unloadingDistrict || 'Merkez'})
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', padding: '6px 10px', borderRadius: 6, margin: '4px 0', fontSize: 11 }}>
+                  <span>Miktar: <strong>{r.quantity || 0} Ton</strong></span>
+                  <span>Alış: <strong>{r.buyPrice || 0} ₺</strong></span>
+                  <span>Satış: <strong>{r.sellPrice || 0} ₺</strong></span>
+                </div>
+
+                <div className="card-bottom-row" style={{ marginTop: 4 }}>
+                  <div>
+                    <span style={{ fontSize: 11, color: '#1d4ed8', fontWeight: 800 }}>Komisyon: </span>
+                    <strong style={{ fontSize: 14, fontFamily: 'monospace', color: '#1d4ed8' }}>
+                      {Number(r.commission || 0).toLocaleString('tr-TR')} ₺
+                    </strong>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteOrderRow(r.id)}
+                    style={{ padding: '5px 8px' }}
+                    title="Sil"
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {orderParamRows.length === 0 && (
+              <div style={{ padding: 24, textAlign: 'center', color: '#94a3b8', fontSize: 12 }}>
+                Kayıtlı sipariş parametresi bulunamadı.
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {/* 5. KASA PARAMETRELERİ */}
       {activeSubTab === 'cash' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 16 }}>
+        <div className="responsive-grid-2" style={{ gap: 16 }}>
           <div className="glass-card" style={{ padding: 0, background: '#fff', overflow: 'hidden', border: '1.5px solid var(--border-color)' }}>
             <div style={{ padding: '12px 18px', background: '#f1f5f9', borderBottom: '1px solid var(--border-color)' }}>
               <strong style={{ fontSize: 14, color: '#0f172a' }}>Kasa & Banka Hesap Tanımları</strong>
@@ -1928,7 +1987,7 @@ export const ParametersView: React.FC = () => {
         const col2 = filteredExpenses.slice(half);
 
         return (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 16, alignItems: 'start' }}>
+          <div className="responsive-grid-2" style={{ gap: 16, alignItems: 'start' }}>
             {/* Sol Bölüm: Arama ve İki Kolonlu Yan Yana Tablo */}
             <div
               className="glass-card"
@@ -1977,12 +2036,11 @@ export const ParametersView: React.FC = () => {
 
               {/* Sabit Yükseklikli 2 Bölümlü Kapsayıcı (Sayfa Aşağı Uzamaz) */}
               <div
+                className="responsive-grid-2"
                 style={{
                   maxHeight: 'calc(100vh - 290px)',
                   overflowY: 'auto',
                   padding: 10,
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
                   gap: 12,
                   background: '#f1f5f9'
                 }}
