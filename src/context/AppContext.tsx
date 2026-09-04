@@ -86,37 +86,43 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+function loadStoredData<T>(key: string, fallback: T): T {
+  const saved = localStorage.getItem(key);
+  if (!saved) return fallback;
+
+  try {
+    return JSON.parse(saved) as T;
+  } catch {
+    localStorage.removeItem(key);
+    return fallback;
+  }
+}
+
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
 
   const [vehicles, setVehicles] = useState<Vehicle[]>(() => {
-    const saved = localStorage.getItem('diza_vehicles');
-    return saved ? JSON.parse(saved) : initialVehicles;
+    return loadStoredData('diza_vehicles', initialVehicles);
   });
 
   const [customers, setCustomers] = useState<Customer[]>(() => {
-    const saved = localStorage.getItem('diza_customers');
-    return saved ? JSON.parse(saved) : initialCustomers;
+    return loadStoredData('diza_customers', initialCustomers);
   });
 
   const [shipments, setShipments] = useState<Shipment[]>(() => {
-    const saved = localStorage.getItem('diza_shipments');
-    return saved ? JSON.parse(saved) : initialShipments;
+    return loadStoredData('diza_shipments', initialShipments);
   });
 
   const [invoices, setInvoices] = useState<Invoice[]>(() => {
-    const saved = localStorage.getItem('diza_invoices');
-    return saved ? JSON.parse(saved) : initialInvoices;
+    return loadStoredData('diza_invoices', initialInvoices);
   });
 
   const [cashEntries, setCashEntries] = useState<CashEntry[]>(() => {
-    const saved = localStorage.getItem('diza_cash');
-    return saved ? JSON.parse(saved) : initialCashEntries;
+    return loadStoredData('diza_cash', initialCashEntries);
   });
 
   const [reminders, setReminders] = useState<ReminderCheck[]>(() => {
-    const saved = localStorage.getItem('diza_reminders');
-    return saved ? JSON.parse(saved) : initialReminders;
+    return loadStoredData('diza_reminders', initialReminders);
   });
 
   const initialOrderParamRows: OrderParamRow[] = [
@@ -192,8 +198,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   ];
 
   const [orderParamRows, setOrderParamRows] = useState<OrderParamRow[]>(() => {
-    const saved = localStorage.getItem('diza_order_param_rows');
-    return saved ? JSON.parse(saved) : initialOrderParamRows;
+    return loadStoredData('diza_order_param_rows', initialOrderParamRows);
   });
 
   const updateOrderParamRows = (rows: OrderParamRow[]) => {
@@ -218,8 +223,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   ];
 
   const [cinsiList, setCinsiList] = useState<{ id: number; name: string; notes?: string }[]>(() => {
-    const saved = localStorage.getItem('diza_cinsi_list');
-    return saved ? JSON.parse(saved) : initialCinsiList;
+    return loadStoredData('diza_cinsi_list', initialCinsiList);
   });
 
   const updateCinsiList = (list: { id: number; name: string; notes?: string }[]) => {
@@ -227,13 +231,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const [vatRates, setVatRates] = useState<VatRateOption[]>(() => {
-    const saved = localStorage.getItem('diza_vat_rates');
-    return saved ? JSON.parse(saved) : [
+    return loadStoredData('diza_vat_rates', [
       { id: 1, name: '%20 Genel KDV', rate: 20, isDefault: true },
       { id: 2, name: '%10 İndirimli KDV', rate: 10, isDefault: false },
       { id: 3, name: '%1 Özel KDV', rate: 1, isDefault: false },
       { id: 4, name: '%0 KDV İstisnası', rate: 0, isDefault: false }
-    ];
+    ]);
   });
 
   const defaultVatRate = vatRates.find(v => v.isDefault)?.rate ?? 20;
@@ -461,6 +464,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   ): Invoice => {
     const cust = customers.find(c => c.id === customerId);
     const selectedShipments = shipments.filter(s => shipmentIds.includes(s.id));
+    const currencies = new Set(selectedShipments.map(s => s.currency));
+
+    if (currencies.size > 1) {
+      throw new Error('Farklı para birimlerindeki sevkiyatlar aynı faturada birleştirilemez.');
+    }
 
     let subTotal = 0;
     let vatTotal = 0;
@@ -528,11 +536,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateInvoice = (id: number, inv: Partial<Invoice>) => {
-    setInvoices(prev => prev.map(item => item.id === id ? { ...item, ...inv } : item));
+    setInvoices(prev => {
+      const current = prev.find(item => item.id === id);
+      if (!current) return prev;
+
+      const updated = { ...current, ...inv };
+      const previousShipmentIds = new Set(current.items.map(item => item.shipmentId).filter((shipmentId): shipmentId is number => shipmentId !== undefined));
+      const updatedShipmentIds = new Set(updated.items.map(item => item.shipmentId).filter((shipmentId): shipmentId is number => shipmentId !== undefined));
+
+      setShipments(currentShipments => currentShipments.map(shipment => {
+        if (previousShipmentIds.has(shipment.id) && !updatedShipmentIds.has(shipment.id) && shipment.invoiceId === id) {
+          return { ...shipment, invoiced: false, invoiceId: undefined, status: 'YOLDA' };
+        }
+        if (updatedShipmentIds.has(shipment.id)) {
+          return { ...shipment, invoiced: true, invoiceId: id, status: 'FATURALANDI' };
+        }
+        return shipment;
+      }));
+
+      return prev.map(item => item.id === id ? updated : item);
+    });
   };
 
   const deleteInvoice = (id: number) => {
     setInvoices(prev => prev.filter(item => item.id !== id));
+    setShipments(prev => prev.map(shipment => shipment.invoiceId === id
+      ? { ...shipment, invoiced: false, invoiceId: undefined, status: 'YOLDA' }
+      : shipment
+    ));
   };
 
   // Kasa

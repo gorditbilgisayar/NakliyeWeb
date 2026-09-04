@@ -167,13 +167,19 @@ export const ShipmentsView: React.FC<{
     const invoiceDate = new Date().toISOString().split('T')[0];
 
     // Faturayı Oluştur
-    const newInvoice = createInvoiceFromShipments(
-      firstShipment.customerId,
-      idsToConvert,
-      invoiceNo,
-      invoiceDate,
-      `Sevkiyat Listesinden Toplu Fatura Aktarımı (${idsToConvert.length} Sefer Kalemi)`
-    );
+    let newInvoice;
+    try {
+      newInvoice = createInvoiceFromShipments(
+        firstShipment.customerId,
+        idsToConvert,
+        invoiceNo,
+        invoiceDate,
+        `Sevkiyat Listesinden Toplu Fatura Aktarımı (${idsToConvert.length} Sefer Kalemi)`
+      );
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Fatura oluşturulamadı.');
+      return;
+    }
 
     // Seçimi Temizle
     setSelectedShipmentIds([]);

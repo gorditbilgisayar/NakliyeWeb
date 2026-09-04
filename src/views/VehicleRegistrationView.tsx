@@ -762,7 +762,7 @@ export const VehicleRegistrationView: React.FC = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="TURAN SERTKAYA"
+            placeholder="Zafer GÖRGÜN"
             value={formData.driverName || ''}
             onChange={e => setFormData({ ...formData, driverName: e.target.value })}
             style={{
@@ -819,7 +819,7 @@ export const VehicleRegistrationView: React.FC = () => {
           <input
             type="text"
             className="form-control"
-            placeholder="BUL-TUR ULUS. NAK."
+            placeholder="GÖRDİT ULUS. NAK."
             value={formData.invoiceTitle || ''}
             onChange={e => setFormData({ ...formData, invoiceTitle: e.target.value })}
             style={{ fontSize: 12, padding: '6px 10px', fontWeight: 700 }}
@@ -967,7 +967,7 @@ export const VehicleRegistrationView: React.FC = () => {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="BUL-TUR"
+                  placeholder="GÖRDİT ULUS. NAK."
                   value={formData.licenseOwner || ''}
                   onChange={e => setFormData({ ...formData, licenseOwner: e.target.value })}
                   style={{ padding: '5px 8px', fontSize: 12 }}

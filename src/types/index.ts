@@ -13,13 +13,13 @@ export interface Vehicle {
   // Üst Alanlar
   plate: string;            // Araç Plakası (47 aac 114)
   trailerPlate?: string;    // Dorse Plakası (55 aaz 504)
-  driverName: string;       // Sürücü Adı Soyadı (TURAN SERTKAYA)
+  driverName: string;       // Sürücü Adı Soyadı (Zafer GÖRGÜN)
   accountType?: 'ARAC' | 'OZEL'; // Hesap Seçimi: Araç / Özel
-  invoiceTitle?: string;    // Fatura Ünvanı (BUL-TUR ULUS. NAK.)
+  invoiceTitle?: string;    // Fatura Ünvanı (GÖRDİT ULUS. NAK.)
   iban?: string;            // İBAN (TR... işbank)
 
   // ARAÇ BİLGİLERİ
-  licenseOwner?: string;    // Ruhsat Sahibi (BUL-TUR)
+  licenseOwner?: string;    // Ruhsat Sahibi (GÖRDİT ULUS. NAK.)
   documentNo?: string;      // Belge No
   registrationNo?: string;  // Tescil No / Tarihi
   brand?: string;           // Markası (Mercedes, Scania, Volvo, Ford, MAN, DAF vb.)

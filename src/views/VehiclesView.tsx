@@ -70,7 +70,7 @@ export const VehiclesView: React.FC = () => {
     // Eğer liste boşsa örnek kayıtlar
     if (list.length === 0) {
       list.push(
-        { key: '47_aac_114', code: 'A-11', title: '47 AAC 114', subtitle: 'TURAN SERTKAYA', type: 'vehicle' },
+        { key: '47_aac_114', code: 'A-11', title: '47 AAC 114', subtitle: 'Zafer GÖRGÜN', type: 'vehicle' },
         { key: '06_abc_47', code: 'A-12', title: '06 ABC 47', subtitle: 'ALİ GEL', type: 'vehicle' },
         { key: 'mila_cari', code: 'C-101', title: 'MİLA MİLA CARİ', subtitle: 'Kurumsal Müşteri', type: 'customer' },
         { key: '47_dksfn', code: 'A-14', title: '47 DKSFN', subtitle: 'ÇŞDÖNFLÖSDNÖM', type: 'vehicle' },

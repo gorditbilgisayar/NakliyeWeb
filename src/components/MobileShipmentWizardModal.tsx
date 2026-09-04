@@ -25,7 +25,7 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
   isOpen,
   onClose
 }) => {
-  const { customers, vehicles, addShipment, cinsiList } = useApp();
+  const { customers, vehicles, addShipment, cinsiList, defaultVatRate } = useApp();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -43,7 +43,7 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
     unit: 'Ton',
     unitPrice: 1650,
     currency: 'TL' as const,
-    vatRate: 20,
+    vatRate: defaultVatRate,
     withholdingRate: '5/10',
     orderDate: new Date().toISOString().split('T')[0],
     loadingDate: new Date().toISOString().split('T')[0],
@@ -94,6 +94,8 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
   };
 
   const handleSave = () => {
+    const selectedVehicle = vehicles.find(vehicle => vehicle.id === formData.selectedVehicleId);
+
     addShipment({
       customerId: formData.customerId,
       customerName: formData.customerName,
@@ -113,6 +115,10 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
       loadingDate: formData.loadingDate,
       status: 'SIPARIS',
       invoiced: false,
+      vehicleId: selectedVehicle?.id,
+      vehiclePlate: selectedVehicle?.plate,
+      driverName: selectedVehicle?.driverName,
+      driverPhone: selectedVehicle?.phone,
       notes: formData.notes
     });
 

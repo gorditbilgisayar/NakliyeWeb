@@ -57,9 +57,10 @@ function convertIntegerPart(num: number): string {
 export function numberToWords(amount: number, currency: 'TL' | 'USD' | 'EUR' = 'TL'): string {
   if (isNaN(amount) || amount === null || amount === undefined) return "";
 
-  const absAmount = Math.abs(amount);
-  const integerPart = Math.floor(absAmount);
-  const decimalPart = Math.round((absAmount - integerPart) * 100);
+  const isNegative = amount < 0;
+  const totalCents = Math.round(Math.abs(amount) * 100);
+  const integerPart = Math.floor(totalCents / 100);
+  const decimalPart = totalCents % 100;
 
   const intWords = convertIntegerPart(integerPart);
   const decWords = decimalPart > 0 ? convertIntegerPart(decimalPart) : "";
@@ -75,7 +76,7 @@ export function numberToWords(amount: number, currency: 'TL' | 'USD' | 'EUR' = '
     subUnit = "Sent";
   }
 
-  let fullText = `# ${intWords} ${mainUnit}`;
+  let fullText = `# ${isNegative ? 'Eksi ' : ''}${intWords} ${mainUnit}`;
   if (decimalPart > 0) {
     fullText += ` ${decWords} ${subUnit} #`;
   } else {
