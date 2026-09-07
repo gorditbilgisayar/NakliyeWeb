@@ -284,7 +284,6 @@ export const CustomersView: React.FC = () => {
                 <th style={{ textAlign: 'left' }}>Yetkili Adı Soyadı</th>
                 <th style={{ textAlign: 'left' }}>İl / İlçe</th>
                 <th style={{ textAlign: 'left' }}>GSM / Cep</th>
-                <th style={{ textAlign: 'left' }}>İş Tel / Fax</th>
                 <th style={{ textAlign: 'left' }}>Vergi Dairesi & No</th>
                 <th style={{ textAlign: 'right' }}>Açık Bakiye (Alacak)</th>
                 <th style={{ textAlign: 'center' }}>Durum</th>
@@ -294,7 +293,7 @@ export const CustomersView: React.FC = () => {
             <tbody>
               {filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={10} style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>
+                  <td colSpan={9} style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>
                     Aranan kriterlere uygun firma kaydı bulunamadı.
                   </td>
                 </tr>
@@ -350,13 +349,6 @@ export const CustomersView: React.FC = () => {
                         >
                           {c.gsmPhone || c.phone}
                         </a>
-                      </td>
-
-                      {/* İş Tel / Fax */}
-                      <td style={{ fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--text-muted)' }}>
-                        {c.workPhone ? <div>İş: {c.workPhone}</div> : null}
-                        {c.fax ? <div>Fax: {c.fax}</div> : null}
-                        {!c.workPhone && !c.fax && <span>-</span>}
                       </td>
 
                       {/* Vergi */}
