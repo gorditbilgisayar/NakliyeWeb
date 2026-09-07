@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
-  Vehicle, Customer, Shipment, Invoice, CashEntry, ReminderCheck, ExchangeRate, CurrencyType, OrderParamRow, VehicleShipmentRow
+  Vehicle, Customer, Shipment, Invoice, CashEntry, ReminderCheck, ExchangeRate, CurrencyType, OrderParamRow, VehicleShipmentRow, PaymentStatus
 } from '../types';
 import {
   initialVehicles, initialCustomers, initialShipments, initialInvoices,
@@ -67,6 +67,8 @@ interface AppContextType {
   createInvoiceFromShipments: (customerId: number, shipmentIds: number[], invoiceNo: string, invoiceDate: string, notes?: string) => Invoice;
   addInvoice: (inv: Omit<Invoice, 'id'>) => void;
   updateInvoice: (id: number, inv: Partial<Invoice>) => void;
+  updateInvoiceStatus: (id: number, status: PaymentStatus) => void;
+  collectInvoiceToCash: (invoiceId: number, amount?: number) => void;
   deleteInvoice: (id: number) => void;
 
   // Kasa Metodları
@@ -390,11 +392,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const syncVehicleShipmentRow = (vehicleId: number, row: VehicleShipmentRow, vehiclePlate?: string, driverName?: string) => {
-    // Müşteri eşleştirme
-    const matchedCustomer = customers.find(
-      c => c.name.toLowerCase().includes(row.company.toLowerCase()) ||
-           row.company.toLowerCase().includes(c.name.toLowerCase())
-    ) || customers[0] || { id: 101, name: row.company || 'Cari Müşteri' };
+    // Müşteri eşleştirme (önce customerId, yoksa isim benzerliği)
+    const matchedCustomer = (row.customerId && customers.find(c => c.id === row.customerId)) ||
+      customers.find(
+        c => c.name.toLowerCase().includes(row.company.toLowerCase()) ||
+             row.company.toLowerCase().includes(c.name.toLowerCase())
+      ) || customers[0] || { id: 101, name: row.company || 'Cari Müşteri' };
 
     const qty = Number(row.quantity) || 1;
     const price = Number(row.sellPrice) || Number(row.buyPrice) || 0;
@@ -414,9 +417,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         customerId: matchedCustomer.id,
         customerName: row.company || matchedCustomer.name,
         loadingLocation: row.loadingPlace || 'Yükleme Yeri',
-        unloadingLocation: `${row.unloadingPlace || 'İndirme Yeri'}${row.unloadingDistrict ? ' / ' + row.unloadingDistrict : ''}`,
+        unloadingLocation: row.unloadingPlace || 'İndirme Yeri',
+        unloadingDistrict: row.unloadingDistrict,
+        dispatchAddress: row.dispatchAddress,
         senderCompany: row.company || 'Gönderici Firma',
         receiverCompany: row.unloadingPlace || 'Alıcı Firma',
+        transporter: row.transporter,
+        intermediary: row.intermediary,
+        commission: row.commission ? Number(row.commission) : undefined,
         goodsType: row.goodsType || 'Muhtelif Yük',
         packaging: 'Dökme / Paletli',
         quantity: qty,
@@ -512,7 +520,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       customerName: cust ? cust.name : 'Müşteri',
       taxOffice: cust?.taxOffice,
       taxNumber: cust?.taxNumber,
-      address: cust?.address,
+      address: cust?.billingAddress || cust?.address || '',
       currency: selectedShipments[0]?.currency || 'TL',
       exchangeRate: 1.0,
       subTotal,
@@ -563,6 +571,38 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }));
 
       return prev.map(item => item.id === id ? updated : item);
+    });
+  };
+
+  const updateInvoiceStatus = (id: number, status: PaymentStatus) => {
+    setInvoices(prev => prev.map(item => item.id === id ? { ...item, paymentStatus: status } : item));
+  };
+
+  // Fatura Tahsilatını Kasaya İşleme Fonksiyonu (Fatura ve Kasa Bağlantısı)
+  const collectInvoiceToCash = (invoiceId: number, amount?: number) => {
+    const inv = invoices.find(i => i.id === invoiceId);
+    if (!inv) return;
+
+    const payAmount = amount || inv.grandTotal;
+    const isFull = payAmount >= inv.grandTotal;
+
+    // Fatura durumunu güncelle
+    updateInvoiceStatus(invoiceId, isFull ? 'ODENDI' : 'KISMI');
+
+    // Kasa kaydı oluştur ve fatura bilgilerini bağla
+    const isSatis = inv.type === 'SATIS';
+    addCashEntry({
+      date: new Date().toISOString().split('T')[0],
+      time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }),
+      type: isSatis ? 'GIRIS' : 'CIKIS',
+      category: isSatis ? 'Müşteri Tahsilatı (Fatura)' : 'Fatura Ödemesi',
+      amount: payAmount,
+      currency: inv.currency,
+      description: `${inv.invoiceNo} nolu faturanın ${isSatis ? 'tahsilatı' : 'ödemesi'} (${inv.customerName})`,
+      recipientOrSender: inv.customerName,
+      customerId: inv.customerId,
+      invoiceId: inv.id,
+      invoiceNo: inv.invoiceNo
     });
   };
 
@@ -685,6 +725,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         createInvoiceFromShipments,
         addInvoice,
         updateInvoice,
+        updateInvoiceStatus,
+        collectInvoiceToCash,
         deleteInvoice,
         addCashEntry,
         updateCashEntry,

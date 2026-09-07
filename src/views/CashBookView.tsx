@@ -23,6 +23,7 @@ export const CashBookView: React.FC<{
     cashEntries,
     vehicles,
     customers,
+    invoices,
     addCashEntry,
     deleteCashEntry,
     getCashBalance
@@ -40,7 +41,9 @@ export const CashBookView: React.FC<{
     description: '',
     recipientOrSender: '',
     vehiclePlate: '',
+    vehicleId: '' as string | number,
     customerId: '' as string | number,
+    invoiceId: '' as string | number,
     date: new Date().toISOString().split('T')[0],
     time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
   });
@@ -58,6 +61,8 @@ export const CashBookView: React.FC<{
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const selectedInv = invoices.find(i => String(i.id) === String(formData.invoiceId));
+
     addCashEntry({
       date: formData.date,
       time: formData.time,
@@ -68,7 +73,10 @@ export const CashBookView: React.FC<{
       description: formData.description || `${formData.category} işlemi`,
       recipientOrSender: formData.recipientOrSender || (formData.type === 'GIRIS' ? 'Müşteri / Cari' : 'Şoför / Harcama'),
       vehiclePlate: formData.vehiclePlate || undefined,
-      customerId: formData.customerId ? Number(formData.customerId) : undefined
+      vehicleId: formData.vehicleId ? Number(formData.vehicleId) : undefined,
+      customerId: formData.customerId ? Number(formData.customerId) : undefined,
+      invoiceId: formData.invoiceId ? Number(formData.invoiceId) : undefined,
+      invoiceNo: selectedInv?.invoiceNo || undefined
     });
 
     onCloseNewModal();
@@ -187,7 +195,14 @@ export const CashBookView: React.FC<{
                   <td><strong>{c.category}</strong></td>
                   <td>{c.recipientOrSender}</td>
                   <td style={{ fontFamily: 'var(--font-mono)', color: '#60a5fa' }}>{c.vehiclePlate || '-'}</td>
-                  <td>{c.description}</td>
+                  <td>
+                    {c.description}
+                    {c.invoiceNo && (
+                      <span className="badge-status badge-fatura" style={{ fontSize: 10, padding: '2px 5px', marginLeft: 6, background: '#eff6ff', color: '#1d4ed8' }}>
+                        Fat: {c.invoiceNo}
+                      </span>
+                    )}
+                  </td>
                   <td>
                     <strong
                       style={{
@@ -202,7 +217,11 @@ export const CashBookView: React.FC<{
                   <td style={{ textAlign: 'right' }}>
                     <button
                       className="btn btn-secondary btn-sm"
-                      onClick={() => deleteCashEntry(c.id)}
+                      onClick={() => {
+                        if (window.confirm('Bu kasa hareketini silmek istediğinize emin misiniz?')) {
+                          deleteCashEntry(c.id);
+                        }
+                      }}
                       title="Sil"
                     >
                       <Trash2 size={13} />
@@ -226,9 +245,16 @@ export const CashBookView: React.FC<{
             }}
           >
             <div className="card-top-row">
-              <span className={`badge-status ${c.type === 'GIRIS' ? 'badge-teslim' : 'badge-fatura'}`}>
-                {c.type === 'GIRIS' ? '✓ TAHSİLAT (GİRİŞ)' : '↗ TEDİYE (ÇIKIŞ)'}
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                <span className={`badge-status ${c.type === 'GIRIS' ? 'badge-teslim' : 'badge-fatura'}`}>
+                  {c.type === 'GIRIS' ? '✓ TAHSİLAT (GİRİŞ)' : '↗ TEDİYE (ÇIKIŞ)'}
+                </span>
+                {c.invoiceNo && (
+                  <span className="badge-status badge-fatura" style={{ background: '#eff6ff', color: '#1d4ed8' }}>
+                    Fat: {c.invoiceNo}
+                  </span>
+                )}
+              </div>
               <span className="card-date-tag">{formatDate(c.date)} {c.time}</span>
             </div>
 
@@ -383,7 +409,15 @@ export const CashBookView: React.FC<{
                     <select
                       className="form-control"
                       value={formData.vehiclePlate}
-                      onChange={e => setFormData({ ...formData, vehiclePlate: e.target.value })}
+                      onChange={e => {
+                        const plate = e.target.value;
+                        const matchedVeh = vehicles.find(v => v.plate === plate);
+                        setFormData(prev => ({
+                          ...prev,
+                          vehiclePlate: plate,
+                          vehicleId: matchedVeh ? matchedVeh.id : ''
+                        }));
+                      }}
                     >
                       <option value="">Araç Seçilmedi</option>
                       {vehicles.map(v => (
@@ -392,6 +426,17 @@ export const CashBookView: React.FC<{
                         </option>
                       ))}
                     </select>
+                    {formData.vehiclePlate && (() => {
+                      const veh = vehicles.find(v => v.plate === formData.vehiclePlate);
+                      if (veh?.iban) {
+                        return (
+                          <div style={{ fontSize: 11, color: '#0369a1', marginTop: 4, background: '#f0f9ff', padding: '4px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>
+                            🏦 <strong>IBAN:</strong> {veh.iban} ({veh.driverName || 'Sürücü'})
+                          </div>
+                        );
+                      }
+                      return null;
+                    })()}
                   </div>
 
                   <div className="form-group">
@@ -413,6 +458,33 @@ export const CashBookView: React.FC<{
                       {customers.map(c => (
                         <option key={c.id} value={c.id}>
                           #{c.id} - {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>İlgili Fatura (Opsiyonel)</label>
+                    <select
+                      className="form-control"
+                      value={formData.invoiceId}
+                      onChange={e => {
+                        const invId = e.target.value;
+                        const inv = invoices.find(i => String(i.id) === invId);
+                        setFormData(prev => ({
+                          ...prev,
+                          invoiceId: invId ? Number(invId) : '',
+                          amount: inv ? inv.grandTotal : prev.amount,
+                          currency: inv ? inv.currency : prev.currency,
+                          recipientOrSender: inv ? inv.customerName : prev.recipientOrSender,
+                          customerId: inv ? inv.customerId : prev.customerId
+                        }));
+                      }}
+                    >
+                      <option value="">Fatura Seçilmedi</option>
+                      {invoices.map(inv => (
+                        <option key={inv.id} value={inv.id}>
+                          {inv.invoiceNo} - {inv.customerName} ({inv.grandTotal.toLocaleString('tr-TR')} {inv.currency}) [{inv.paymentStatus}]
                         </option>
                       ))}
                     </select>

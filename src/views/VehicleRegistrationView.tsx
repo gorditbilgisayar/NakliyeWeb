@@ -371,6 +371,8 @@ export const VehicleRegistrationView: React.FC = () => {
       const newId = Date.now();
       const generatedSNo = String(Math.floor(Math.random() * 9000) + 10000);
 
+      const matchedCustomer = customers.find(c => c.name.toLowerCase().includes((paramRow.company || '').toLowerCase()));
+
       const newRow: VehicleShipmentRow = {
         id: newId,
         sNo: generatedSNo,
@@ -378,6 +380,7 @@ export const VehicleRegistrationView: React.FC = () => {
         plate: `${formData.plate || ''} ${formData.trailerPlate ? '- ' + formData.trailerPlate : ''}`.trim(),
         date: new Date().toISOString().split('T')[0],
         company: paramRow.company || '',
+        customerId: matchedCustomer ? matchedCustomer.id : undefined,
         transporter: paramRow.transporter || 'TÜRKLER NAKLİYAT',
         intermediary: paramRow.intermediary || 'TÜRKLER NAK.',
         loadingPlace: paramRow.loadingPlace || '',
@@ -539,6 +542,8 @@ export const VehicleRegistrationView: React.FC = () => {
       const sell = Number(updatedDraft.sellPrice) || 0;
       const comm = (sell - buy) > 0 ? (sell - buy) * qty : Number(updatedDraft.commission) || 0;
 
+      const matchedCust = customers.find(c => c.name.toLowerCase().includes((updatedDraft.company || '').toLowerCase()));
+
       const newRow: VehicleShipmentRow = {
         id: newId,
         sNo: generatedSNo,
@@ -546,6 +551,7 @@ export const VehicleRegistrationView: React.FC = () => {
         plate: updatedDraft.plate || `${formData.plate || ''} ${formData.trailerPlate ? '- ' + formData.trailerPlate : ''}`.trim(),
         date: updatedDraft.date || new Date().toISOString().split('T')[0],
         company: updatedDraft.company || '',
+        customerId: matchedCust ? matchedCust.id : undefined,
         transporter: updatedDraft.transporter || 'TÜRKLER NAKLİYAT',
         intermediary: updatedDraft.intermediary || 'TÜRKLER NAK.',
         loadingPlace: updatedDraft.loadingPlace || '',

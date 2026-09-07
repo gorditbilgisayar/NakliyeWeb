@@ -68,6 +68,7 @@ export interface VehicleShipmentRow {
   sellPrice: number;        // Sat_Fiyat (Satış Fiyatı örn: 215.00)
   vatRate: number;          // KDV (örn: 18, 20)
   commission: number;       // Komisyon (örn: 200, 1000)
+  customerId?: number;      // İlişkili Müşteri / Cari ID
   notes?: string;           // Not
   dispatchAddress?: string; // sevk_adresi
 }
@@ -138,8 +139,13 @@ export interface Shipment {
   customerName: string;
   loadingLocation: string;// yukleme_yeri (Örn: Mersin Limanı)
   unloadingLocation: string; // indirme_yeri (Örn: Kayseri OSB)
+  unloadingDistrict?: string;// indirme_ilcesi
+  dispatchAddress?: string;  // sevk_adresi
   senderCompany: string;  // Gonderici
   receiverCompany: string;// Alici
+  transporter?: string;   // Nakliyeci Firma
+  intermediary?: string;  // Aracı / Komisyoncu
+  commission?: number;    // Komisyon Tutarı
   goodsType: string;      // Cinsi (Örn: Profil Boru, Demir, Gıda)
   packaging: string;      // Ambalaj (Örn: Palet, Rulo, Dökme, Çuval)
   quantity: number;       // Miktar / Tonaj
@@ -229,7 +235,11 @@ export interface CashEntry {
   description: string;
   recipientOrSender: string; // Kimden alındı / Kime ödendi
   vehiclePlate?: string;
-  customerId?: number;
+  vehicleId?: number;        // İlişkili Araç ID
+  customerId?: number;       // İlişkili Müşteri / Cari ID
+  invoiceId?: number;        // İlişkili Fatura ID
+  invoiceNo?: string;        // İlişkili Fatura Numarası
+  reminderId?: number;       // İlişkili Çek / Senet ID
 }
 
 // 7. Vade & Çek / Senet Hatırlatıcı (Alacak_verecek_data)

@@ -32,6 +32,7 @@ export const InvoicesView: React.FC<{
     customers,
     addInvoice,
     updateInvoice,
+    collectInvoiceToCash,
     deleteInvoice,
     vatRates,
     defaultVatRate
@@ -458,6 +459,22 @@ export const InvoicesView: React.FC<{
                         <Edit size={12} /> İncele / Düzenle
                       </button>
 
+                      {inv.paymentStatus !== 'ODENDI' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm(`${inv.invoiceNo} nolu faturanın tutarı (${inv.grandTotal.toLocaleString('tr-TR')} ${inv.currency}) kasaya tahsil edilsin mi?`)) {
+                              collectInvoiceToCash(inv.id);
+                            }
+                          }}
+                          className="btn btn-success"
+                          style={{ padding: '4px 8px', fontSize: 11, display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                          title="Tahsil Et ve Kasaya Ekle"
+                        >
+                          <Check size={12} /> Tahsil Et
+                        </button>
+                      )}
+
                       <button
                         type="button"
                         onClick={() => setPrintInvoice(inv)}
@@ -537,6 +554,21 @@ export const InvoicesView: React.FC<{
                 </div>
 
                 <div style={{ display: 'flex', gap: 6 }}>
+                  {inv.paymentStatus !== 'ODENDI' && (
+                    <button
+                      type="button"
+                      className="btn btn-success btn-sm"
+                      onClick={() => {
+                        if (window.confirm(`${inv.invoiceNo} nolu faturanın tutarı (${inv.grandTotal.toLocaleString('tr-TR')} ${inv.currency}) kasaya tahsil edilsin mi?`)) {
+                          collectInvoiceToCash(inv.id);
+                        }
+                      }}
+                      style={{ padding: '5px 8px', fontSize: 11 }}
+                      title="Tahsil Et"
+                    >
+                      <Check size={13} />
+                    </button>
+                  )}
                   <button
                     type="button"
                     className="btn btn-secondary btn-sm"

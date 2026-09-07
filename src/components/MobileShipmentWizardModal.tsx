@@ -25,7 +25,7 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
   isOpen,
   onClose
 }) => {
-  const { customers, vehicles, addShipment, cinsiList, defaultVatRate } = useApp();
+  const { customers, vehicles, addShipment, cinsiList, defaultVatRate, orderParamRows } = useApp();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
 
@@ -92,7 +92,8 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
         ...prev,
         customerId: cust.id,
         customerName: cust.name,
-        senderCompany: cust.name
+        senderCompany: cust.name,
+        unloadingLocation: cust.shippingAddress || prev.unloadingLocation
       }));
     }
   };
@@ -158,6 +159,48 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
           {/* ADIM 1: MÜŞTERİ VE GÜZERGAH */}
           {step === 1 && (
             <div className="wizard-step-content">
+              {/* Hazır Sipariş Şablonu */}
+              {orderParamRows && orderParamRows.length > 0 && (
+                <div className="wizard-field">
+                  <label style={{ color: 'var(--diza-red)', fontWeight: 800 }}>📋 Hazır Yük / Sipariş Şablonu</label>
+                  <select
+                    className="wizard-select"
+                    onChange={e => {
+                      const pId = Number(e.target.value);
+                      const p = orderParamRows.find(item => item.id === pId);
+                      if (p) {
+                        const mCust = customers.find(c => c.name.toLowerCase().includes(p.company.toLowerCase()) || p.company.toLowerCase().includes(c.name.toLowerCase()));
+                        setFormData(prev => ({
+                          ...prev,
+                          customerId: mCust ? mCust.id : prev.customerId,
+                          customerName: mCust ? mCust.name : (p.company || prev.customerName),
+                          loadingLocation: p.loadingPlace || prev.loadingLocation,
+                          unloadingLocation: `${p.unloadingPlace || ''}${p.unloadingDistrict ? ' / ' + p.unloadingDistrict : ''}` || prev.unloadingLocation,
+                          goodsType: p.goodsType || prev.goodsType,
+                          quantity: p.quantity ? Number(p.quantity) : prev.quantity,
+                          unitPrice: p.sellPrice ? Number(p.sellPrice) : p.buyPrice ? Number(p.buyPrice) : prev.unitPrice,
+                          vatRate: p.vatRate ? Number(p.vatRate) : prev.vatRate
+                        }));
+                      }
+                    }}
+                  >
+                    <option value="">Şablon Seçiniz (Otomatik Doldur)...</option>
+                    {orderParamRows.map(p => (
+                      <option key={p.id} value={p.id}>
+                        {p.loadTitle} — {p.company} ({p.loadingPlace} ➔ {p.unloadingPlace})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Müşteri Risk Durumu Uyarısı */}
+              {selectedCustomer?.isProblematic && (
+                <div style={{ background: '#fee2e2', border: '1px solid #ef4444', color: '#b91c1c', padding: '8px 12px', borderRadius: 8, fontSize: 12, fontWeight: 700 }}>
+                  ⚠️ DİKKAT: {selectedCustomer.name} firması Problemli / Riskli listesindedir! {selectedCustomer.problemReason ? `(${selectedCustomer.problemReason})` : ''}
+                </div>
+              )}
+
               {/* Cari Seçimi */}
               <div className="wizard-field">
                 <label><Building2 size={16} /> Müşteri / Cari Firma</label>
@@ -168,7 +211,7 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
                 >
                   {customers.map(c => (
                     <option key={c.id} value={c.id}>
-                      {c.name} {c.city ? `(${c.city})` : ''}
+                      {c.isProblematic ? '⚠️ ' : ''}{c.name} {c.city ? `(${c.city})` : ''}
                     </option>
                   ))}
                 </select>
@@ -267,10 +310,21 @@ export const MobileShipmentWizardModal: React.FC<MobileShipmentWizardModalProps>
                   <option value={0}>-- Araç Sonra Atansın (Sipariş Modu) --</option>
                   {vehicles.filter(v => v.isActive).map(v => (
                     <option key={v.id} value={v.id}>
-                      {v.plate} - {v.driverName} ({v.trailerPlate || 'Dorse Yok'})
+                      {v.isProblematic ? '⚠️ ' : ''}{v.plate} - {v.driverName} ({v.trailerPlate || 'Dorse Yok'})
                     </option>
                   ))}
                 </select>
+                {(() => {
+                  const selV = vehicles.find(v => v.id === formData.selectedVehicleId);
+                  if (selV?.isProblematic) {
+                    return (
+                      <div style={{ background: '#fee2e2', border: '1px solid #ef4444', color: '#b91c1c', padding: '6px 10px', borderRadius: 6, fontSize: 11.5, marginTop: 6, fontWeight: 700 }}>
+                        ⚠️ DİKKAT: Seçilen araç ({selV.plate}) Problemli / Riskli listesindedir! {selV.problemReason ? `(${selV.problemReason})` : ''}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
 
               {/* Yükleme Tarihi */}

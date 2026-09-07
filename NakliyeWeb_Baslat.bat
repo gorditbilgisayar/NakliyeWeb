@@ -1,9 +1,9 @@
 @echo off
 chcp 65001 >nul
-title NakliyeWeb - DİZA Lojistik & Filo ERP v2.7.0 - Gördit Bilgisayar
+title NakliyeWeb - DİZA Lojistik & Filo ERP v2.8.0 - Gördit Bilgisayar
 
 echo ===================================================
-echo   NakliyeWeb - DİZA Lojistik & Filo ERP v2.7.0
+echo   NakliyeWeb - DİZA Lojistik & Filo ERP v2.8.0
 echo   Gördit Bilgisayar — Zafer GÖRGÜN
 echo ===================================================
 echo.

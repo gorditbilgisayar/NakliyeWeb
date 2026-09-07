@@ -33,6 +33,7 @@ export const ShipmentsView: React.FC<{
     customers,
     vehicles,
     invoices,
+    orderParamRows,
     addShipment,
     assignVehicleToShipment,
     completeShipment,
@@ -857,6 +858,55 @@ export const ShipmentsView: React.FC<{
 
             {/* Modal Form */}
             <form onSubmit={handleCreateShipment} style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {/* Hazır Sipariş Parametresi Seçimi */}
+              <div>
+                <label style={{ fontSize: 11.5, fontWeight: 700, color: '#0369a1', display: 'block', marginBottom: 4 }}>
+                  📋 Hazır Yük / Sipariş Şablonu Seç (Parametrelerden Otomatik Doldur)
+                </label>
+                <select
+                  onChange={e => {
+                    const paramId = Number(e.target.value);
+                    const p = orderParamRows.find(item => item.id === paramId);
+                    if (p) {
+                      const matchedCust = customers.find(c => c.name.toLowerCase().includes(p.company.toLowerCase()) || p.company.toLowerCase().includes(c.name.toLowerCase()));
+                      setFormData(prev => ({
+                        ...prev,
+                        customerId: matchedCust ? matchedCust.id : prev.customerId,
+                        loadingLocation: p.loadingPlace || prev.loadingLocation,
+                        unloadingLocation: `${p.unloadingPlace || ''}${p.unloadingDistrict ? ' / ' + p.unloadingDistrict : ''}` || prev.unloadingLocation,
+                        goodsType: p.goodsType || prev.goodsType,
+                        quantity: p.quantity ? Number(p.quantity) : prev.quantity,
+                        unitPrice: p.sellPrice ? Number(p.sellPrice) : p.buyPrice ? Number(p.buyPrice) : prev.unitPrice,
+                        vatRate: p.vatRate ? Number(p.vatRate) : prev.vatRate,
+                        senderCompany: p.company || prev.senderCompany,
+                        receiverCompany: p.unloadingPlace || prev.receiverCompany
+                      }));
+                    }
+                  }}
+                  style={{ width: '100%', padding: '7px 10px', border: '1px solid #38bdf8', borderRadius: 6, fontSize: 12, background: '#f0f9ff' }}
+                >
+                  <option value="">Parametrelerden Şablon Seçiniz...</option>
+                  {orderParamRows.map(p => (
+                    <option key={p.id} value={p.id}>
+                      {p.loadTitle} — {p.company} ({p.loadingPlace} ➔ {p.unloadingPlace}) [{p.goodsType}]
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Müşteri Risk Durumu Uyarısı */}
+              {(() => {
+                const curCust = customers.find(c => c.id === formData.customerId);
+                if (curCust?.isProblematic) {
+                  return (
+                    <div style={{ background: '#fef2f2', border: '1px solid #f87171', color: '#b91c1c', padding: '8px 12px', borderRadius: 6, fontSize: 12, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700 }}>
+                      ⚠️ DİKKAT: Seçilen firma ({curCust.name}) Riskli / Problemli (Kara Liste) kaydındadır! {curCust.problemReason ? `Açıklama: ${curCust.problemReason}` : ''}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div>
                   <label style={{ fontSize: 11.5, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 4 }}>
@@ -864,12 +914,20 @@ export const ShipmentsView: React.FC<{
                   </label>
                   <select
                     value={formData.customerId}
-                    onChange={e => setFormData(prev => ({ ...prev, customerId: Number(e.target.value) }))}
+                    onChange={e => {
+                      const cId = Number(e.target.value);
+                      const c = customers.find(cust => cust.id === cId);
+                      setFormData(prev => ({
+                        ...prev,
+                        customerId: cId,
+                        unloadingLocation: c?.shippingAddress ? c.shippingAddress : prev.unloadingLocation
+                      }));
+                    }}
                     style={{ width: '100%', padding: '7px 10px', border: '1px solid #cbd5e1', borderRadius: 6, fontSize: 12, fontWeight: 700 }}
                   >
                     {customers.map(c => (
                       <option key={c.id} value={c.id}>
-                        {c.name} {c.city ? `(${c.city})` : ''}
+                        {c.isProblematic ? '⚠️ ' : ''}{c.name} {c.city ? `(${c.city})` : ''}
                       </option>
                     ))}
                   </select>
@@ -1058,10 +1116,21 @@ export const ShipmentsView: React.FC<{
                 >
                   {vehicles.map(v => (
                     <option key={v.id} value={v.id}>
-                      {v.plate} — {v.driverName} ({v.phone})
+                      {v.isProblematic ? '⚠️ ' : ''}{v.plate} — {v.driverName} ({v.phone})
                     </option>
                   ))}
                 </select>
+                {(() => {
+                  const selVeh = vehicles.find(v => v.id === selectedVehicleId);
+                  if (selVeh?.isProblematic) {
+                    return (
+                      <div style={{ background: '#fef2f2', border: '1px solid #f87171', color: '#b91c1c', padding: '6px 10px', borderRadius: 6, fontSize: 11.5, marginTop: 6, fontWeight: 700 }}>
+                        ⚠️ DİKKAT: Seçilen araç ({selVeh.plate}) Problemli araç listesindedir! {selVeh.problemReason ? `(${selVeh.problemReason})` : ''}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
 
               <div>
