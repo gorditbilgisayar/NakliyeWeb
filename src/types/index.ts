@@ -199,7 +199,7 @@ export interface Invoice {
   notes?: string;
 }
 
-// 5. Araç & Cari Finans Hareketleri (Hareketler_data)
+// 5. Araç & Cari Finans Hareketleri (Hareketler_data - Gelecek genişletmeler için genel şablon)
 export interface Transaction {
   id: number;
   date: string;

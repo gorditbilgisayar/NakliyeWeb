@@ -18,7 +18,8 @@ import {
   Square,
   Sparkles,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Trash2
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/numberToWords';
 
@@ -627,20 +628,42 @@ export const ShipmentsView: React.FC<{
                           Faturası Var
                         </button>
                       ) : (
-                        <button
-                          type="button"
-                          onClick={() => handleConvertSelectedToInvoice([s.id])}
-                          className="btn btn-primary"
-                          style={{
-                            padding: '3px 9px',
-                            fontSize: 10.5,
-                            borderRadius: 4,
-                            fontWeight: 800
-                          }}
-                          title="Bu Sevkiyata Fatura Kes"
-                        >
-                          Fatura Kes
-                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                          <button
+                            type="button"
+                            onClick={() => handleConvertSelectedToInvoice([s.id])}
+                            className="btn btn-primary"
+                            style={{
+                              padding: '3px 9px',
+                              fontSize: 10.5,
+                              borderRadius: 4,
+                              fontWeight: 800
+                            }}
+                            title="Bu Sevkiyata Fatura Kes"
+                          >
+                            Fatura Kes
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (window.confirm(`${s.shipmentNo} numaralı sevkiyat kaydını silmek istediğinize emin misiniz?`)) {
+                                deleteShipment(s.id);
+                              }
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#ef4444',
+                              cursor: 'pointer',
+                              padding: '3px 5px',
+                              display: 'inline-flex',
+                              alignItems: 'center'
+                            }}
+                            title="Sevkiyatı Sil"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>
@@ -708,15 +731,30 @@ export const ShipmentsView: React.FC<{
                     <span className="label">Navlun:</span>
                     <strong>{s.totalAmount?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} {s.currency}</strong>
                   </div>
-                  <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     {!s.invoiced ? (
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-sm"
-                        onClick={() => handleConvertSelectedToInvoice([s.id])}
-                      >
-                        Fatura Kes
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={() => handleConvertSelectedToInvoice([s.id])}
+                        >
+                          Fatura Kes
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => {
+                            if (window.confirm(`${s.shipmentNo} numaralı sevkiyat kaydını silmek istediğinize emin misiniz?`)) {
+                              deleteShipment(s.id);
+                            }
+                          }}
+                          style={{ padding: '5px 8px' }}
+                          title="Sevkiyatı Sil"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </>
                     ) : (
                       <span style={{ fontSize: 11, color: '#059669', fontWeight: 800 }}>✓ Faturalı</span>
                     )}

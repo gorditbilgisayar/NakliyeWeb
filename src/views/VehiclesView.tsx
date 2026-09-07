@@ -67,17 +67,7 @@ export const VehiclesView: React.FC = () => {
       });
     });
 
-    // Eğer liste boşsa örnek kayıtlar
-    if (list.length === 0) {
-      list.push(
-        { key: '47_aac_114', code: 'A-11', title: '47 AAC 114', subtitle: 'Zafer GÖRGÜN', type: 'vehicle' },
-        { key: '06_abc_47', code: 'A-12', title: '06 ABC 47', subtitle: 'ALİ GEL', type: 'vehicle' },
-        { key: 'mila_cari', code: 'C-101', title: 'MİLA MİLA CARİ', subtitle: 'Kurumsal Müşteri', type: 'customer' },
-        { key: '47_dksfn', code: 'A-14', title: '47 DKSFN', subtitle: 'ÇŞDÖNFLÖSDNÖM', type: 'vehicle' },
-        { key: '47_ac_414', code: 'A-15', title: '47 AC 414', subtitle: 'SÖÇDMFNÖ', type: 'vehicle' },
-        { key: '47_mn_5451', code: 'A-16', title: '47 MN 5451', subtitle: 'SÖMDN SD', type: 'vehicle' }
-      );
-    }
+    // Liste boşsa ek örnek ekleme — kullanıcı kendi araç/cari kayıtlarını oluşturur
 
     return list;
   }, [vehicles, customers]);

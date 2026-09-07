@@ -261,7 +261,11 @@ export const RemindersView: React.FC = () => {
                 )}
                 <button
                   className="btn btn-danger btn-sm"
-                  onClick={() => deleteReminder(r.id)}
+                  onClick={() => {
+                    if (window.confirm('Bu çek / senet kaydını silmek istediğinize emin misiniz?')) {
+                      deleteReminder(r.id);
+                    }
+                  }}
                   style={{ padding: '6px 8px' }}
                   title="Sil"
                 >
@@ -339,6 +343,34 @@ export const RemindersView: React.FC = () => {
                       onChange={e => setFormData({ ...formData, amount: Number(e.target.value) })}
                       required
                     />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Para Birimi</label>
+                    <select
+                      className="form-control"
+                      value={formData.currency}
+                      onChange={e => setFormData({ ...formData, currency: e.target.value as CurrencyType })}
+                    >
+                      <option value="TL">TL (Türk Lirası)</option>
+                      <option value="USD">USD (Dolar)</option>
+                      <option value="EUR">EUR (Euro)</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>İlgili Müşteri / Cari</label>
+                    <select
+                      className="form-control"
+                      value={formData.customerId}
+                      onChange={e => setFormData({ ...formData, customerId: Number(e.target.value) })}
+                    >
+                      {customers.map(c => (
+                        <option key={c.id} value={c.id}>
+                          {c.name} ({c.city})
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-group">

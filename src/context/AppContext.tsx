@@ -71,6 +71,7 @@ interface AppContextType {
 
   // Kasa Metodları
   addCashEntry: (entry: Omit<CashEntry, 'id'>) => void;
+  updateCashEntry: (id: number, entry: Partial<CashEntry>) => void;
   deleteCashEntry: (id: number) => void;
 
   // Vade & Çek / Senet Metodları
@@ -267,16 +268,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { localStorage.setItem('diza_order_param_rows', JSON.stringify(orderParamRows)); }, [orderParamRows]);
   useEffect(() => { localStorage.setItem('diza_cinsi_list', JSON.stringify(cinsiList)); }, [cinsiList]);
 
-  // Tevkifat Hesaplayıcı Yardımcı
+  // Tevkifat Hesaplayıcı Yardımcı (Tüm yasal oranlar desteklenir)
   const calculateWithholding = (baseAmount: number, vatRate: number, rateStr: string) => {
     const vat = baseAmount * (vatRate / 100);
     let withAmount = 0;
-    if (rateStr === '2/10') withAmount = vat * 0.2;
-    else if (rateStr === '3/10') withAmount = vat * 0.3;
-    else if (rateStr === '4/10') withAmount = vat * 0.4;
-    else if (rateStr === '5/10') withAmount = vat * 0.5;
-    else if (rateStr === '7/10') withAmount = vat * 0.7;
-    else if (rateStr === '9/10') withAmount = vat * 0.9;
+    const rateMap: Record<string, number> = {
+      '1/10': 0.1, '2/10': 0.2, '3/10': 0.3, '4/10': 0.4, '5/10': 0.5,
+      '6/10': 0.6, '7/10': 0.7, '8/10': 0.8, '9/10': 0.9, '10/10': 1.0
+    };
+    const multiplier = rateMap[rateStr];
+    if (multiplier !== undefined) {
+      withAmount = vat * multiplier;
+    }
     return {
       vatAmount: vat,
       withholdingAmount: withAmount,
@@ -317,7 +320,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newId = shipments.length > 0 ? Math.max(...shipments.map(x => x.id)) + 1 : 1;
     const base = s.quantity * s.unitPrice;
     const { vatAmount, withholdingAmount, netPayable } = calculateWithholding(base, s.vatRate, s.withholdingRate);
-    const shipmentNo = `YK-2026-${String(newId).padStart(3, '0')}`;
+    const shipmentNo = `YK-${new Date().getFullYear()}-${String(newId).padStart(3, '0')}`;
 
     const newShipment: Shipment = {
       ...s,
@@ -397,7 +400,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const price = Number(row.sellPrice) || Number(row.buyPrice) || 0;
     const base = qty * price;
     const vat = Number(row.vatRate) || defaultVatRate;
-    const { vatAmount, withholdingAmount, netPayable } = calculateWithholding(base, vat, '5/10');
+    const rowWithholdingRate = '5/10'; // Varsayılan: Taşımacılık hizmeti tevkifatı
+    const { vatAmount, withholdingAmount, netPayable } = calculateWithholding(base, vat, rowWithholdingRate);
 
     setShipments(prev => {
       const existingIndex = prev.findIndex(s => s.shipmentNo === row.sNo || (s.id === row.id && s.vehicleId === vehicleId));
@@ -420,14 +424,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         unitPrice: price,
         currency: 'TL',
         vatRate: vat,
-        withholdingRate: '5/10',
+        withholdingRate: rowWithholdingRate,
         totalAmount: base,
         vatAmount,
         withholdingAmount,
         netPayableAmount: netPayable,
         vehicleId: vehicleId,
-        vehiclePlate: row.plate || vehiclePlate || '47 AAC 114',
-        driverName: driverName || 'Sürücü',
+        vehiclePlate: row.plate || vehiclePlate || '',
+        driverName: driverName || '',
         driverFreightCost: (Number(row.buyPrice) || 0) * qty,
         status: 'YOLDA',
         invoiced: false,
@@ -451,7 +455,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const removeVehicleShipmentRow = (rowSNo: string, rowId: number) => {
-    setShipments(prev => prev.filter(s => s.shipmentNo !== rowSNo && s.id !== rowId));
+    setShipments(prev => prev.filter(s => {
+      if (rowId && rowId > 0) return s.id !== rowId;
+      if (rowSNo) return s.shipmentNo !== rowSNo;
+      return true;
+    }));
   };
 
   // Yüklerden Otomatik Fatura Oluşturma (Access: Yukten_faturaya_ekleme)
@@ -572,6 +580,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setCashEntries(prev => [{ ...entry, id: newId }, ...prev]);
   };
 
+  const updateCashEntry = (id: number, entry: Partial<CashEntry>) => {
+    setCashEntries(prev => prev.map(item => item.id === id ? { ...item, ...entry } : item));
+  };
+
   const deleteCashEntry = (id: number) => {
     setCashEntries(prev => prev.filter(item => item.id !== id));
   };
@@ -617,9 +629,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   // Müşteri Bakiyesi Hesaplayıcı (Fatura Borcu vs Tahsilat Alacağı)
+  // H-09: SATIŞ faturaları müşterinin borcunu, ALIŞ faturaları bizim borcumuzu oluşturur
   const getCustomerBalance = (customerId: number, currency: CurrencyType) => {
     const custInvoices = invoices.filter(i => i.customerId === customerId && i.currency === currency);
-    const borc = custInvoices.reduce((sum, i) => sum + i.grandTotal, 0);
+    const satisToplamı = custInvoices.filter(i => i.type === 'SATIS').reduce((sum, i) => sum + i.grandTotal, 0);
+    const alisToplamı = custInvoices.filter(i => i.type === 'ALIS').reduce((sum, i) => sum + i.grandTotal, 0);
+    const borc = satisToplamı - alisToplamı; // Müşterinin bize net fatura borcu
 
     const alacak = cashEntries
       .filter(c => c.currency === currency && c.type === 'GIRIS' && c.customerId === customerId)
@@ -672,6 +687,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         updateInvoice,
         deleteInvoice,
         addCashEntry,
+        updateCashEntry,
         deleteCashEntry,
         addReminder,
         updateReminderStatus,

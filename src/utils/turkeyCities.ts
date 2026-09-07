@@ -97,3 +97,18 @@ export const CITIES_LIST = [
     .filter(c => c !== "ETİ BAKIR A.Ş.")
     .sort((a, b) => a.localeCompare(b, 'tr', { sensitivity: 'base' }))
 ];
+
+/**
+ * İl adına göre ilçe listesini döndürür (Büyük-küçük harf ve Türkçe karakter toleranslı)
+ */
+export function getDistrictsByCity(cityName?: string): string[] {
+  if (!cityName) return [];
+  const normalized = cityName.trim().toLocaleLowerCase('tr');
+  if (normalized.includes('eti bakir') || normalized.includes('eti̇ bakir') || normalized.includes('eti bakır')) {
+    return TURKEY_CITIES_DISTRICTS["ETİ BAKIR A.Ş."] || [];
+  }
+  const matchedKey = Object.keys(TURKEY_CITIES_DISTRICTS).find(
+    k => k.toLocaleLowerCase('tr') === normalized
+  );
+  return matchedKey ? TURKEY_CITIES_DISTRICTS[matchedKey] : [];
+}

@@ -50,7 +50,7 @@ export const InvoicesView: React.FC<{
   // Yeni Manuel Fatura State
   const [newFormData, setNewFormData] = useState({
     customerId: customers[0]?.id || 101,
-    invoiceNo: `TUR${new Date().getFullYear()}${String(Math.floor(Math.random() * 900000) + 100000)}`,
+    invoiceNo: `TUR${new Date().getFullYear()}${String(invoices.length > 0 ? Math.max(...invoices.map(i => parseInt(i.invoiceNo.replace(/\D/g, '') || '0', 10))) + 1 : 1).padStart(6, '0')}`,
     invoiceDate: new Date().toISOString().split('T')[0],
     currency: 'TL' as CurrencyType,
     notes: 'Tevkifat Kapsamında Taşımacılık Hizmeti Faturası'

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import {
   Wallet,
@@ -32,6 +32,15 @@ export const DashboardView: React.FC<{
   onOpenNewCash: () => void;
   onOpenNewInvoice: () => void;
 }> = ({ onOpenNewShipment, onOpenNewCash, onOpenNewInvoice }) => {
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const {
     shipments,
     vehicles,
@@ -95,7 +104,7 @@ export const DashboardView: React.FC<{
             <div className="dashboard-hero-title-row">
               <h2>DİZA LOJİSTİK & FİLO ERP</h2>
               <span className="dashboard-version-badge">
-                Gördit Bilgisayar v2.6.1
+                Gördit Bilgisayar v2.7.0
               </span>
             </div>
             <p>
@@ -116,7 +125,7 @@ export const DashboardView: React.FC<{
           <div className="dashboard-status-chip">
             <div className="chip-label">Tarih & Saat</div>
             <div className="chip-value mono">
-              {new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' })}
+              {currentDateTime.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' })} {currentDateTime.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
             </div>
           </div>
         </div>
@@ -623,15 +632,35 @@ export const DashboardView: React.FC<{
                     <td style={{ padding: '7px 8px', textAlign: 'center' }}>
                       <span
                         style={{
-                          background: inv.paymentStatus === 'ODENDI' ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
-                          color: inv.paymentStatus === 'ODENDI' ? '#059669' : '#dc2626',
+                          background:
+                            inv.paymentStatus === 'ODENDI'
+                              ? 'rgba(16,185,129,0.1)'
+                              : inv.paymentStatus === 'KISMI'
+                              ? 'rgba(245,158,11,0.1)'
+                              : inv.paymentStatus === 'BEKLEMEDE'
+                              ? 'rgba(99,102,241,0.1)'
+                              : 'rgba(239,68,68,0.1)',
+                          color:
+                            inv.paymentStatus === 'ODENDI'
+                              ? '#059669'
+                              : inv.paymentStatus === 'KISMI'
+                              ? '#d97706'
+                              : inv.paymentStatus === 'BEKLEMEDE'
+                              ? '#4f46e5'
+                              : '#dc2626',
                           padding: '2px 6px',
                           borderRadius: 4,
                           fontSize: 10,
                           fontWeight: 800
                         }}
                       >
-                        {inv.paymentStatus === 'ODENDI' ? 'ÖDENDİ' : 'ÖDENMEDİ'}
+                        {inv.paymentStatus === 'ODENDI'
+                          ? 'ÖDENDİ'
+                          : inv.paymentStatus === 'KISMI'
+                          ? 'KISMİ'
+                          : inv.paymentStatus === 'BEKLEMEDE'
+                          ? 'BEKLEMEDE'
+                          : 'ÖDENMEDİ'}
                       </span>
                     </td>
                   </tr>

@@ -14,7 +14,7 @@ export const MobileCashWizardModal: React.FC<MobileCashWizardModalProps> = ({
   isOpen,
   onClose
 }) => {
-  const { customers, vehicles, addCashEntry } = useApp();
+  const { addCashEntry } = useApp();
 
   const [entryType, setEntryType] = useState<'GELIR' | 'GIDER'>('GELIR');
   const [currency, setCurrency] = useState<'TL' | 'USD' | 'EUR'>('TL');

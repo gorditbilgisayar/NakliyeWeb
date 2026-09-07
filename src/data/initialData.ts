@@ -1,4 +1,4 @@
-import { Vehicle, Customer, Shipment, Invoice, Transaction, CashEntry, ReminderCheck, ExchangeRate } from '../types';
+import { Vehicle, Customer, Shipment, Invoice, CashEntry, ReminderCheck, ExchangeRate } from '../types';
 
 export const initialVehicles: Vehicle[] = [
   {

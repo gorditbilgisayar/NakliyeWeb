@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { OrderParamRow } from '../types';
-import { TURKEY_CITIES_DISTRICTS, CITIES_LIST } from '../utils/turkeyCities';
+import { TURKEY_CITIES_DISTRICTS, CITIES_LIST, getDistrictsByCity } from '../utils/turkeyCities';
 import { formatPhoneNumber } from '../utils/phoneFormatter';
 import {
   Package,
@@ -39,24 +39,13 @@ export const ParametersView: React.FC = () => {
   } = useApp();
   const [activeSubTab, setActiveSubTab] = useState<'company' | 'cinsi' | 'orders' | 'cash' | 'expenses' | 'invoices'>('company');
 
-  // İl adına göre ilçe listesini getiren yardımcı fonksiyon
-  const getDistrictsByCity = (cityName?: string): string[] => {
-    if (!cityName) return [];
-    const normalized = cityName.trim().toLocaleLowerCase('tr');
-    if (normalized.includes('eti bakir') || normalized.includes('eti̇ bakir') || normalized.includes('eti bakır')) {
-      return TURKEY_CITIES_DISTRICTS["ETİ BAKIR A.Ş."] || [];
-    }
-    const matchedKey = Object.keys(TURKEY_CITIES_DISTRICTS).find(
-      k => k.toLocaleLowerCase('tr') === normalized
-    );
-    return matchedKey ? TURKEY_CITIES_DISTRICTS[matchedKey] : [];
-  };
+
 
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // 1. ŞİRKET BİLGİLERİ
-  const [companySettings, setCompanySettings] = useState({
+  // 1. ŞİRKET BİLGİLERİ (localStorage ile kalıcı)
+  const defaultCompanySettings = {
     companyName: 'GÖRDİT BİLGİSAYAR VE TAŞIMACILIK SAN. TİC. LTD. ŞTİ.',
     brandName: 'DİZA LOJİSTİK',
     authorizedPerson: 'Zafer GÖRGÜN',
@@ -77,7 +66,19 @@ export const ParametersView: React.FC = () => {
     ibanUSD: 'TR44 0006 2000 0001 2345 6789 02 - Garanti BBVA (USD)',
     ibanEUR: 'TR55 0006 2000 0001 2345 6789 03 - Garanti BBVA (EUR)',
     invoiceNote: 'Bu fatura muhteviyatı 5/10 Tevkifat kapsamındadır. İtiraz süresi 8 gündür.'
+  };
+
+  const [companySettings, setCompanySettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('diza_company_settings');
+      return saved ? { ...defaultCompanySettings, ...JSON.parse(saved) } : defaultCompanySettings;
+    } catch { return defaultCompanySettings; }
   });
+
+  // Şirket bilgileri değiştiğinde localStorage'a kaydet
+  useEffect(() => {
+    localStorage.setItem('diza_company_settings', JSON.stringify(companySettings));
+  }, [companySettings]);
 
   const availableCompanyDistricts = TURKEY_CITIES_DISTRICTS[companySettings.city || 'Mersin'] || ['Merkez'];
 

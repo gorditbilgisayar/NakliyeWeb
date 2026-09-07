@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { formatCurrency, formatDate } from '../utils/numberToWords';
 import { formatPhoneNumber } from '../utils/phoneFormatter';
-import { TURKEY_CITIES_DISTRICTS, CITIES_LIST } from '../utils/turkeyCities';
+import { TURKEY_CITIES_DISTRICTS, CITIES_LIST, getDistrictsByCity } from '../utils/turkeyCities';
 
 export const VehicleRegistrationView: React.FC = () => {
   const {
@@ -35,18 +35,7 @@ export const VehicleRegistrationView: React.FC = () => {
     removeVehicleShipmentRow
   } = useApp();
 
-  // İl adına göre ilçe listesini getiren yardımcı fonksiyon (Büyük-küçük harf ve Türkçe karakter toleranslı)
-  const getDistrictsByCity = (cityName?: string): string[] => {
-    if (!cityName) return [];
-    const normalized = cityName.trim().toLocaleLowerCase('tr');
-    if (normalized.includes('eti bakir') || normalized.includes('eti̇ bakir') || normalized.includes('eti bakır')) {
-      return TURKEY_CITIES_DISTRICTS["ETİ BAKIR A.Ş."] || [];
-    }
-    const matchedKey = Object.keys(TURKEY_CITIES_DISTRICTS).find(
-      k => k.toLocaleLowerCase('tr') === normalized
-    );
-    return matchedKey ? TURKEY_CITIES_DISTRICTS[matchedKey] : [];
-  };
+
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedVehicleId, setSelectedVehicleId] = useState<number>(vehicles[0]?.id || 1);
@@ -66,7 +55,7 @@ export const VehicleRegistrationView: React.FC = () => {
         'KAYSERİ PROFİL'
       ].filter(Boolean)
     )
-  ).sort((a, b) => a.localeCompare('tr'));
+  ).sort((a, b) => a.localeCompare(b, 'tr'));
 
   // Tanımlı Yük Seçim Modalı State
   const [isDefinedLoadModalOpen, setIsDefinedLoadModalOpen] = useState<boolean>(false);

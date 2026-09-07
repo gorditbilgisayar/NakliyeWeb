@@ -95,10 +95,10 @@ export const NotificationModal: React.FC<{ isOpen: boolean; onClose: () => void 
                       </strong>
                       <button
                         className="btn btn-success btn-sm"
-                        onClick={() => updateReminderStatus(r.id, 'TAHSIL_EDILDI')}
+                        onClick={() => updateReminderStatus(r.id, r.direction === 'ALACAK' ? 'TAHSIL_EDILDI' : 'ODENDI')}
                         style={{ fontSize: 11, padding: '4px 8px' }}
                       >
-                        <CheckCircle size={12} /> Tahsil Edildi
+                        <CheckCircle size={12} /> {r.direction === 'ALACAK' ? 'Tahsil Edildi' : 'Ödendi'}
                       </button>
                     </div>
                   </div>

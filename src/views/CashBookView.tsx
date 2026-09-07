@@ -40,7 +40,7 @@ export const CashBookView: React.FC<{
     description: '',
     recipientOrSender: '',
     vehiclePlate: '',
-    customerId: customers[0]?.id || 101,
+    customerId: '' as string | number,
     date: new Date().toISOString().split('T')[0],
     time: new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
   });
@@ -261,7 +261,11 @@ export const CashBookView: React.FC<{
 
               <button
                 className="btn btn-danger btn-sm"
-                onClick={() => deleteCashEntry(c.id)}
+                onClick={() => {
+                  if (window.confirm('Bu kasa hareketini silmek istediğinize emin misiniz?')) {
+                    deleteCashEntry(c.id);
+                  }
+                }}
                 title="Hareketi Sil"
                 style={{ padding: '5px 9px' }}
               >
@@ -385,6 +389,30 @@ export const CashBookView: React.FC<{
                       {vehicles.map(v => (
                         <option key={v.id} value={v.plate}>
                           {v.plate} ({v.driverName})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>İlgili Cari / Müşteri (Opsiyonel)</label>
+                    <select
+                      className="form-control"
+                      value={formData.customerId}
+                      onChange={e => {
+                        const val = e.target.value;
+                        const selectedCust = customers.find(c => String(c.id) === val);
+                        setFormData(prev => ({
+                          ...prev,
+                          customerId: val ? Number(val) : '',
+                          recipientOrSender: prev.recipientOrSender || (selectedCust ? selectedCust.name : '')
+                        }));
+                      }}
+                    >
+                      <option value="">Cari Seçilmedi</option>
+                      {customers.map(c => (
+                        <option key={c.id} value={c.id}>
+                          #{c.id} - {c.name}
                         </option>
                       ))}
                     </select>
