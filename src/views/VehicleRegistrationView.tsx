@@ -2126,8 +2126,8 @@ export const VehicleRegistrationView: React.FC = () => {
             <div
               className="modal-card"
               style={{
-                width: '100%',
-                maxWidth: 1060,
+                width: '96vw',
+                maxWidth: 1220,
                 maxHeight: '92vh',
                 background: '#ffffff',
                 borderRadius: 'var(--radius-lg)',
@@ -2186,7 +2186,7 @@ export const VehicleRegistrationView: React.FC = () => {
               {/* Arama Çubuğu */}
               <div
                 style={{
-                  padding: '12px 20px',
+                  padding: '10px 16px',
                   background: '#f8fafc',
                   borderBottom: '1.5px solid var(--border-color)',
                   display: 'flex',
@@ -2207,27 +2207,27 @@ export const VehicleRegistrationView: React.FC = () => {
                     style={{ paddingLeft: 36, fontSize: 13, height: 38 }}
                   />
                 </div>
-                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)' }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                   {filteredParamLoads.length} Tanımlı Yük Bulundu
                 </span>
               </div>
 
               {/* Tanımlı Yükler Tablosu */}
-              <div style={{ overflowY: 'auto', flex: 1, padding: 0 }}>
-                <table className="data-table" style={{ fontSize: 12 }}>
+              <div style={{ overflow: 'auto', flex: 1, padding: 0 }}>
+                <table className="data-table" style={{ width: '100%', minWidth: 980, fontSize: 12, borderCollapse: 'collapse' }}>
                   <thead>
                     <tr style={{ background: '#e2e8f0', color: '#1e293b', position: 'sticky', top: 0, zIndex: 2 }}>
-                      <th style={{ width: 60, textAlign: 'center' }}>sip_id</th>
-                      <th style={{ textAlign: 'left' }}>Yükün Tanımı</th>
-                      <th style={{ textAlign: 'left' }}>Firma / Müşteri</th>
-                      <th style={{ textAlign: 'left' }}>Yükleme ➔ İndirme Yeri</th>
-                      <th style={{ textAlign: 'left' }}>Cinsi</th>
-                      <th style={{ width: 70, textAlign: 'right' }}>Miktar</th>
-                      <th style={{ width: 80, textAlign: 'right' }}>Alış Fiy.</th>
-                      <th style={{ width: 80, textAlign: 'right' }}>Satış Fiy.</th>
-                      <th style={{ width: 55, textAlign: 'center' }}>KDV</th>
-                      <th style={{ width: 75, textAlign: 'right' }}>Komisyon</th>
-                      <th style={{ width: 110, textAlign: 'center' }}>İşlem</th>
+                      <th style={{ width: 55, textAlign: 'center', padding: '8px 6px', whiteSpace: 'nowrap' }}>SİP_ID</th>
+                      <th style={{ textAlign: 'left', padding: '8px 8px', whiteSpace: 'nowrap' }}>Yükün Tanımı</th>
+                      <th style={{ textAlign: 'left', padding: '8px 8px', whiteSpace: 'nowrap' }}>Firma / Müşteri</th>
+                      <th style={{ textAlign: 'left', padding: '8px 8px', whiteSpace: 'nowrap' }}>Yükleme ➔ İndirme Yeri</th>
+                      <th style={{ textAlign: 'left', padding: '8px 8px', whiteSpace: 'nowrap' }}>Cinsi</th>
+                      <th style={{ width: 70, textAlign: 'right', padding: '8px 6px', whiteSpace: 'nowrap' }}>Miktar</th>
+                      <th style={{ width: 75, textAlign: 'right', padding: '8px 6px', whiteSpace: 'nowrap' }}>Alış Fiy.</th>
+                      <th style={{ width: 75, textAlign: 'right', padding: '8px 6px', whiteSpace: 'nowrap' }}>Satış Fiy.</th>
+                      <th style={{ width: 50, textAlign: 'center', padding: '8px 4px', whiteSpace: 'nowrap' }}>KDV</th>
+                      <th style={{ width: 75, textAlign: 'right', padding: '8px 6px', whiteSpace: 'nowrap' }}>Komisyon</th>
+                      <th style={{ width: 100, textAlign: 'center', padding: '8px 6px', whiteSpace: 'nowrap' }}>İşlem</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -2239,44 +2239,44 @@ export const VehicleRegistrationView: React.FC = () => {
                         className="hover-row"
                         title="Seçmek için çift tıklayınız veya 'Seç & Aktar' butonuna basınız"
                       >
-                        <td style={{ textAlign: 'center', fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'var(--font-mono)' }}>
+                        <td style={{ textAlign: 'center', fontWeight: 900, color: 'var(--diza-red)', fontFamily: 'var(--font-mono)', padding: '6px 4px' }}>
                           {p.sip_id}
                         </td>
-                        <td>
+                        <td style={{ padding: '6px 8px' }}>
                           <strong style={{ color: '#1e40af' }}>{p.loadTitle}</strong>
                         </td>
-                        <td>
+                        <td style={{ padding: '6px 8px' }}>
                           <strong style={{ color: '#0f172a' }}>{p.company}</strong>
                         </td>
-                        <td>
+                        <td style={{ padding: '6px 8px' }}>
                           <span style={{ color: '#047857', fontWeight: 700 }}>{p.loadingPlace}</span>
                           <span style={{ margin: '0 4px', color: '#94a3b8' }}>➔</span>
                           <span style={{ color: '#b91c1c', fontWeight: 700 }}>
                             {p.unloadingPlace} {p.unloadingDistrict ? `(${p.unloadingDistrict})` : ''}
                           </span>
                         </td>
-                        <td>{p.goodsType || '-'}</td>
-                        <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                        <td style={{ padding: '6px 8px' }}>{p.goodsType || '-'}</td>
+                        <td style={{ textAlign: 'right', fontWeight: 700, padding: '6px 6px', whiteSpace: 'nowrap' }}>
                           {p.quantity ? `${p.quantity} Ton` : '-'}
                         </td>
-                        <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
+                        <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 700, padding: '6px 6px', whiteSpace: 'nowrap' }}>
                           {p.buyPrice ? `${Number(p.buyPrice).toFixed(2)} TL` : '-'}
                         </td>
-                        <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 800, color: '#1d4ed8' }}>
+                        <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 800, color: '#1d4ed8', padding: '6px 6px', whiteSpace: 'nowrap' }}>
                           {p.sellPrice ? `${Number(p.sellPrice).toFixed(2)} TL` : '-'}
                         </td>
-                        <td style={{ textAlign: 'center', fontWeight: 800, color: '#047857' }}>
+                        <td style={{ textAlign: 'center', fontWeight: 800, color: '#047857', padding: '6px 4px', whiteSpace: 'nowrap' }}>
                           %{p.vatRate ?? 20}
                         </td>
-                        <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--diza-red)' }}>
+                        <td style={{ textAlign: 'right', fontFamily: 'var(--font-mono)', fontWeight: 800, color: 'var(--diza-red)', padding: '6px 6px', whiteSpace: 'nowrap' }}>
                           {p.commission ? `${Number(p.commission).toLocaleString('tr-TR')} TL` : '-'}
                         </td>
-                        <td style={{ textAlign: 'center' }}>
+                        <td style={{ textAlign: 'center', padding: '6px 6px', whiteSpace: 'nowrap' }}>
                           <button
                             type="button"
                             className="btn btn-primary"
                             onClick={() => applyDefinedLoadToRow(targetRowIdForDefinedLoad, p)}
-                            style={{ padding: '4px 10px', fontSize: 11, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                            style={{ padding: '4px 8px', fontSize: 11, fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}
                           >
                             <Check size={12} />
                             Seç & Aktar
