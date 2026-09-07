@@ -3,20 +3,14 @@
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
-
-  # HTTPS Yönlendirmesi (Opsiyonel)
-  # RewriteCond %{HTTPS} off
-  # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Gerçek dosya veya dizin varsa doğrudan sun
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
 
   # SPA için tüm istekleri index.html'e yönlendir
-  RewriteRule . index.html [L]
+  RewriteRule ^ index.html [L]
 </IfModule>
 
 # MIME Type Ayarları (JavaScript ve CSS'in doğru yüklenmesi için)
